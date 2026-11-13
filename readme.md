@@ -7,10 +7,12 @@ It contains only the functionality available in the open-source repository.
 
 ## Download this fork
 
-Open [Bruno Clean Build](https://github.com/ArtimTikhonov/bruno-clean/actions/workflows/clean-build.yml),
-select a successful run and download the `bruno-clean-linux-x64` artifact.
-Extract it, make the AppImage executable, and run it. The artifact requires GitHub login
-and is retained for 30 days; the workflow can be run again from the Actions tab.
+Download the Linux x64 AppImage from the [latest release](https://github.com/ArtimTikhonov/bruno-clean/releases/latest),
+make it executable, and run it. Releases are published only after the packaged app
+passes its startup check.
+
+The [build workflow](https://github.com/ArtimTikhonov/bruno-clean/actions/workflows/clean-build.yml)
+also retains the AppImage and a startup screenshot as downloadable artifacts for 30 days.
 
 ## Build from source
 
@@ -204,7 +206,6 @@ Or any version control system of your choice
 - [Documentation](https://docs.usebruno.com)
 - [Stack Overflow](https://stackoverflow.com/questions/tagged/bruno)
 - [Website](https://www.usebruno.com)
-- [Pricing](https://www.usebruno.com/pricing)
 - [Download](https://www.usebruno.com/downloads)
 
 ## Showcase 🎥

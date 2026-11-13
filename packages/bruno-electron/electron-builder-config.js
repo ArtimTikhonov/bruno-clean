@@ -19,6 +19,14 @@ const config = {
   },
   extraResources: [
     {
+      from: '../../license.md',
+      to: 'LICENSE.bruno.txt'
+    },
+    {
+      from: '../../THIRD_PARTY_NOTICES.md',
+      to: 'THIRD_PARTY_NOTICES.md'
+    },
+    {
       from: 'resources/data/sample-collection.json',
       to: 'data/sample-collection.json'
     }

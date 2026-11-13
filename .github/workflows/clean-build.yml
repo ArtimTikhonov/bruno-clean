@@ -17,6 +17,8 @@ concurrency:
 
 jobs:
   linux:
+    permissions:
+      contents: write
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     env:
@@ -63,3 +65,12 @@ jobs:
           path: packages/bruno-electron/out/*.AppImage
           if-no-files-found: error
           retention-days: 30
+      - name: Publish verified Linux build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >-
+          gh release create "clean-build-${GITHUB_RUN_NUMBER}"
+          packages/bruno-electron/out/*.AppImage
+          --target "$GITHUB_SHA"
+          --title "Bruno Clean - Linux build ${GITHUB_RUN_NUMBER}"
+          --notes "Unofficial MIT-source fork of Bruno without Golden Edition promotions or the upstream announcement feed. Linux x64 AppImage. The build passed JavaScript linting, the announcement isolation test, and a packaged desktop startup test. Original licenses and artwork attribution are included."
