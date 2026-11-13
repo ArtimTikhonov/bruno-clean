@@ -7,8 +7,11 @@ const os = require('node:os');
   const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'bruno-clean-smoke-'));
   let app;
   try {
+    const executable = process.platform === 'win32'
+      ? '../../packages/bruno-electron/out/win-unpacked/bruno-clean.exe'
+      : '../../packages/bruno-electron/out/linux-unpacked/bruno-clean';
     app = await electron.launch({
-      executablePath: path.join(__dirname, '../../packages/bruno-electron/out/linux-unpacked/bruno-clean'),
+      executablePath: process.env.BRUNO_CLEAN_EXECUTABLE || path.join(__dirname, executable),
       args: [`--user-data-dir=${profile}`, '--no-sandbox'],
       timeout: 60000
     });

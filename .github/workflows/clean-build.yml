@@ -16,11 +16,20 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  linux:
-    permissions:
-      contents: write
-    runs-on: ubuntu-24.04
+  build:
+    name: Build and test (${{ matrix.platform }})
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: linux
+            os: ubuntu-24.04
+            shell: bash
+          - platform: windows
+            os: windows-latest
+            shell: pwsh
     env:
       CSC_IDENTITY_AUTO_DISCOVERY: 'false'
       NODE_OPTIONS: '--max-old-space-size=6144'
@@ -34,6 +43,8 @@ jobs:
         run: node --test scripts/tests/notifications.test.cjs
       - name: Install dependencies and build shared packages
         uses: ./.github/actions/common/setup-node-deps
+        with:
+          shell: ${{ matrix.shell }}
       - name: Lint changed JavaScript
         run: >-
           npm run lint --
@@ -48,29 +59,67 @@ jobs:
       - name: Prepare Electron renderer
         run: node scripts/prepare-clean-electron.cjs
       - name: Package Linux AppImage
+        if: runner.os == 'Linux'
         run: npm run dist:linux --workspace=packages/bruno-electron -- --x64 --publish never
+      - name: Package Windows installer
+        if: runner.os == 'Windows'
+        run: npm run dist:win --workspace=packages/bruno-electron -- --x64 --publish never
       - name: Install desktop test dependencies
+        if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y xvfb libgtk-3-0 libnss3 libasound2t64 libgbm1
-      - name: Smoke test packaged app
+      - name: Smoke test Linux packaged app
+        if: runner.os == 'Linux'
         run: xvfb-run -a node scripts/tests/clean-smoke.cjs
+      - name: Install and smoke test Windows app
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $installer = Get-ChildItem packages/bruno-electron/out/*_setup.exe | Select-Object -First 1
+          if (-not $installer) { throw 'Windows installer is missing' }
+          $installDir = Join-Path $env:RUNNER_TEMP 'BrunoCleanInstall'
+          $process = Start-Process -FilePath $installer.FullName -ArgumentList '/S', "/D=$installDir" -Wait -PassThru
+          if ($process.ExitCode -ne 0) { throw "Installer failed: $($process.ExitCode)" }
+          $env:BRUNO_CLEAN_EXECUTABLE = Join-Path $installDir 'bruno-clean.exe'
+          if (-not (Test-Path $env:BRUNO_CLEAN_EXECUTABLE)) { throw 'Installed executable is missing' }
+          node scripts/tests/clean-smoke.cjs
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Upload smoke test screenshot
         uses: actions/upload-artifact@v6
         with:
-          name: bruno-clean-smoke
+          name: bruno-clean-smoke-${{ matrix.platform }}
           path: bruno-clean-smoke.png
-      - name: Upload Linux app
+      - name: Upload app
         uses: actions/upload-artifact@v6
         with:
-          name: bruno-clean-linux-x64
-          path: packages/bruno-electron/out/*.AppImage
+          name: bruno-clean-app-${{ matrix.platform }}-x64
+          path: |
+            packages/bruno-electron/out/*.AppImage
+            packages/bruno-electron/out/*_setup.exe
           if-no-files-found: error
           retention-days: 30
-      - name: Publish verified Linux build
+
+  release:
+    name: Publish verified builds
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v6
+        with:
+          pattern: bruno-clean-app-*
+          path: dist
+          merge-multiple: true
+      - name: Generate checksums
+        working-directory: dist
+        run: sha256sum *.AppImage *.exe > SHA256SUMS.txt
+      - name: Publish Linux and Windows builds
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
         run: >-
           gh release create "clean-build-${GITHUB_RUN_NUMBER}"
-          packages/bruno-electron/out/*.AppImage
+          dist/*
           --target "$GITHUB_SHA"
-          --title "Bruno Clean - Linux build ${GITHUB_RUN_NUMBER}"
-          --notes "Unofficial MIT-source fork of Bruno without Golden Edition promotions or the upstream announcement feed. Linux x64 AppImage. The build passed JavaScript linting, the announcement isolation test, and a packaged desktop startup test. Original licenses and artwork attribution are included."
+          --title "Bruno Clean - Windows and Linux build ${GITHUB_RUN_NUMBER}"
+          --notes "Unofficial MIT-source fork of Bruno without Golden Edition promotions or the upstream announcement feed. Windows x64 NSIS installer and Linux x64 AppImage. Both platforms passed JavaScript linting, the announcement isolation test and a desktop startup check. The Windows installer was also installed and the installed executable tested on a Windows runner. Windows binaries are unsigned. Original licenses and artwork attribution are included."

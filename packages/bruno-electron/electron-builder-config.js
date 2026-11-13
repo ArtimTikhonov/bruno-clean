@@ -122,17 +122,15 @@ const config = {
     }
   },
   win: {
-    artifactName: '${name}_${version}_${arch}_win.${ext}',
+    executableName: 'bruno-clean',
+    artifactName: 'bruno-clean_${version}_${arch}_setup.${ext}',
     icon: 'resources/icons/win/icon.ico',
     target: [
       {
         target: 'nsis',
         arch: ['x64', 'arm64']
       }
-    ],
-    signtoolOptions: {
-      publisherName: 'Bruno Software Inc'
-    }
+    ]
   },
   nsis: {
     include: 'resources/installer.nsh',

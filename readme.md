@@ -7,12 +7,16 @@ It contains only the functionality available in the open-source repository.
 
 ## Download this fork
 
-Download the Linux x64 AppImage from the [latest release](https://github.com/ArtimTikhonov/bruno-clean/releases/latest),
-make it executable, and run it. Releases are published only after the packaged app
-passes its startup check.
+Download from the [latest release](https://github.com/ArtimTikhonov/bruno-clean/releases/latest):
+
+- Windows x64: run the `bruno-clean_*_x64_setup.exe` installer.
+- Linux x64: make the AppImage executable, then run it.
+
+Releases are published only after both platforms pass their startup checks.
+Windows installers are unsigned.
 
 The [build workflow](https://github.com/ArtimTikhonov/bruno-clean/actions/workflows/clean-build.yml)
-also retains the AppImage and a startup screenshot as downloadable artifacts for 30 days.
+also retains the installers and startup screenshots as downloadable artifacts for 30 days.
 
 ## Build from source
 
