@@ -71,6 +71,7 @@ jobs:
           packages/bruno-app/src/components/Preferences/index.js
           packages/bruno-app/src/components/Preferences/Beta/index.js
           packages/bruno-app/src/components/RequestTabs/CollectionHeader/index.js
+          packages/bruno-app/src/components/RequestTabPanel/index.js
           packages/bruno-app/src/components/RequestPane/HttpRequestPane/index.js
           packages/bruno-app/src/components/RequestPane/GraphQLRequestPane/index.js
           packages/bruno-app/src/components/RequestPane/GrpcRequestPane/index.js

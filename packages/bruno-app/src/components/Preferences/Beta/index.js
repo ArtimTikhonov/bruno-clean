@@ -32,7 +32,7 @@ import { getDocsUrlWithVersion } from 'utils/url';
  *   - docsUrl     (optional) URL to the documentation for the feature.
  *   - defaultEnabled (optional) value used when the preference has never been saved. Must match the
  *                 default in the electron preferences store, otherwise the toggle lies about the state.
- *   - action      (optional) object with { label, tab } to render a button that navigates to a specific preferences tab. The label is the button text, and the tab is the tab key (e.g. 'ai', 'cache').
+ *   - action      (optional) object with { label, tab } to render a button that navigates to a specific preferences tab. The label is the button text, and the tab is the tab key (e.g. 'cache').
  *
  * To add a beta feature:
  *   1. Add its key to BETA_FEATURES in utils/beta-features.js (e.g. MY_FEATURE: 'my-feature').
