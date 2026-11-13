@@ -11,7 +11,6 @@ import Documentation from './Documentation';
 import Auth from './Auth';
 import Settings from './Settings';
 import StatusDot from 'components/StatusDot';
-import SettingsAiAssist from 'components/SettingsAiAssist';
 import DocsAction from 'components/Documentation/DocsAction';
 import { hasEffectiveAuth } from 'utils/auth';
 import { getFolderTags } from '@usebruno/common';
@@ -123,7 +122,6 @@ const FolderSettings = ({ collection, folder }) => {
           {AI_TABS.includes(tab) && (
             <div className="flex items-center gap-2 flex-shrink-0">
               {tab === 'docs' && <DocsAction />}
-              <SettingsAiAssist collection={collection} folder={folder} activeTab={tab} />
             </div>
           )}
         </div>

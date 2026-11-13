@@ -26,7 +26,6 @@ jest.mock('utils/mock-server/mock-server-instances', () => ({
 import { configureStore } from '@reduxjs/toolkit';
 import workspacesReducer from './index';
 import collectionsReducer from '../collections';
-import chatReducer from '../chat';
 import appReducer from '../app';
 import tabsReducer from '../tabs';
 import apiSpecReducer from '../apiSpec';
@@ -87,7 +86,6 @@ const createStore = () =>
     reducer: {
       workspaces: workspacesReducer,
       collections: collectionsReducer,
-      chat: chatReducer,
       app: appReducer,
       tabs: tabsReducer,
       apiSpec: apiSpecReducer,
@@ -122,7 +120,6 @@ const createStore = () =>
         tempDirectories: {},
         saveTransientRequestModals: []
       },
-      chat: { isOpen: false, chats: {} },
       app: {
         snapshotReady: true,
         snapshotHydration: {

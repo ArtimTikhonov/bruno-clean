@@ -44,14 +44,6 @@ import { getDocsUrlWithVersion } from 'utils/url';
  */
 const BETA_FEATURES = [
   {
-    id: BETA_FEATURE_IDS.AI_ASSISTANT,
-    label: 'AI Assistant',
-    description:
-      'Generate scripts, tests, and documentation directly from the request tab. Includes contextual chat, scripting autocomplete, and support for OpenAI, Anthropic, and OpenAI-compatible providers using your own API key.',
-    action: { label: 'Go to AI settings', tab: 'ai' },
-    docsUrl: 'https://link.usebruno.com/docs/ai'
-  },
-  {
     id: BETA_FEATURE_IDS.FILE_CACHE,
     label: 'File cache',
     description:

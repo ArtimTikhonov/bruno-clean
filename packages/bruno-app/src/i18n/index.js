@@ -4,12 +4,16 @@ import translationEn from './translation/en.json';
 import translationRu from './translation/ru.json';
 import uiRu from './translation/ui.ru.json';
 import nounsRu from './translation/nouns.ru.json';
+import uiRuIt from './translation/ui.ru-it.json';
 
 export const LANGUAGE_STORAGE_KEY = 'bruno-clean.language';
+export const ENGLISH_TERMS_STORAGE_KEY = 'bruno-clean.english-it-terms';
 let language = 'ru';
+export let englishTermsEnabled = false;
 try {
   const saved = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
   if (saved === 'en' || saved === 'ru') language = saved;
+  englishTermsEnabled = window.localStorage.getItem(ENGLISH_TERMS_STORAGE_KEY) === 'true';
 } catch {
   // Restricted storage must not prevent the application from starting.
 }
@@ -20,7 +24,7 @@ const resources = {
   },
   ru: {
     translation: translationRu,
-    ui: uiRu,
+    ui: englishTermsEnabled ? { ...uiRu, ...uiRuIt } : uiRu,
     nouns: nounsRu
   }
 };

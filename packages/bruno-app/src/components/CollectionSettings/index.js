@@ -15,7 +15,6 @@ import StyledWrapper from './StyledWrapper';
 import Vars from './Vars/index';
 import StatusDot from 'components/StatusDot';
 import Overview from './Overview/index';
-import SettingsAiAssist from 'components/SettingsAiAssist';
 import DocsAction from 'components/Documentation/DocsAction';
 import { useDocsEditingState } from 'components/Documentation/useDocsEditingState';
 import { DEFAULT_PRESET_REQUEST_TYPE } from 'utils/common/constants';
@@ -157,7 +156,6 @@ const CollectionSettings = ({ collection }) => {
         {AI_TABS.includes(tab) && (
           <div className="flex items-center gap-2 flex-shrink-0">
             {tab === 'overview' && !isEditing && <DocsAction />}
-            <SettingsAiAssist collection={collection} activeTab={tab} />
           </div>
         )}
       </div>

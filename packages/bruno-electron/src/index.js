@@ -46,6 +46,9 @@ const localizeMenu = require('./app/localize-menu');
 const menuTranslations = require(isDev
   ? path.join(__dirname, '../../bruno-app/src/i18n/translation/ui.ru.json')
   : path.join(process.resourcesPath, 'ui.ru.json'));
+const menuItTranslations = require(isDev
+  ? path.join(__dirname, '../../bruno-app/src/i18n/translation/ui.ru-it.json')
+  : path.join(process.resourcesPath, 'ui.ru-it.json'));
 const { openCollection } = require('./app/collections');
 const registerNetworkIpc = require('./ipc/network');
 const registerCollectionsIpc = require('./ipc/collection');
@@ -59,8 +62,6 @@ const registerApiSpecIpc = require('./ipc/apiSpec');
 const registerGitIpc = require('./ipc/git');
 const registerOpenAPISyncIpc = require('./ipc/openapi-sync');
 const registerMockServerIpc = require('./ipc/mock-server');
-const registerAiIpc = require('./ipc/ai');
-const registerAiAutocompleteIpc = require('./ipc/ai/autocomplete');
 const { registerMountIpc } = require('./ipc/mount');
 const { registerSqliteIpc } = require('./ipc/sqlite');
 const sqliteService = require('./services/sqlite');
@@ -115,9 +116,10 @@ const contentSecurityPolicy = [
 setContentSecurityPolicy(contentSecurityPolicy.join(';') + ';');
 
 const menu = Menu.buildFromTemplate(localizeMenu(menuTemplate, 'ru', menuTranslations));
-ipcMain.on('renderer:ui-language', (event, language) => {
+ipcMain.on('renderer:ui-language', (event, language, englishTerms) => {
   if (language !== 'ru' && language !== 'en') return;
-  Menu.setApplicationMenu(Menu.buildFromTemplate(localizeMenu(menuTemplate, language, menuTranslations)));
+  const translations = englishTerms === true ? { ...menuTranslations, ...menuItTranslations } : menuTranslations;
+  Menu.setApplicationMenu(Menu.buildFromTemplate(localizeMenu(menuTemplate, language, translations)));
 });
 const isMac = process.platform === 'darwin';
 const isWindows = process.platform === 'win32';
@@ -273,7 +275,7 @@ app.on('ready', async () => {
       preload: path.join(__dirname, 'preload.js'),
       webviewTag: true
     },
-    title: 'Bruno Clean',
+    title: 'Bruno',
     icon: path.join(__dirname, 'about/256x256.png'),
     titleBarStyle: isMac ? 'hiddenInset' : isWindows ? 'hidden' : undefined,
     frame: isLinux ? false : true,
@@ -440,7 +442,7 @@ app.on('ready', async () => {
   });
 
   // The window must only ever show the app's own document: any other target
-  // (e.g. a link in a schema description or AI reply) would inherit the preload
+  // (e.g. a link in a schema description or documentation link) would inherit the preload
   // bridge. Block it and hand http(s) URLs to the system browser.
   const guardNavigation = (event, url) => {
     if (isAppUrl(url)) return;
@@ -471,32 +473,7 @@ app.on('ready', async () => {
     }
   });
 
-  const AI_POPOUT_FRAME_PREFIX = 'bruno-ai-assistant';
-  const isAiPopoutFrame = (frameName) => Boolean(frameName && frameName.startsWith(AI_POPOUT_FRAME_PREFIX));
-
-  mainWindow.webContents.setWindowOpenHandler(({ url, frameName }) => {
-    if (isAiPopoutFrame(frameName) && (!url || url === 'about:blank')) {
-      return {
-        action: 'allow',
-        overrideBrowserWindowOptions: {
-          width: 480,
-          height: 640,
-          minWidth: 400,
-          minHeight: 480,
-          backgroundColor: themeBg,
-          icon: path.join(__dirname, 'about', '256x256.png'),
-          autoHideMenuBar: true,
-          // No OS title bar, the chat header is the drag region and carries
-          // its own close/dock controls.
-          frame: false,
-          webPreferences: {
-            preload: '',
-            nodeIntegration: false,
-            contextIsolation: true
-          }
-        }
-      };
-    }
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     try {
       const { protocol } = new URL(url);
       if (['https:', 'http:'].includes(protocol)) {
@@ -506,27 +483,6 @@ app.on('ready', async () => {
       console.error(e);
     }
     return { action: 'deny' };
-  });
-
-  mainWindow.webContents.on('did-create-window', (childWindow, { frameName }) => {
-    if (!isAiPopoutFrame(frameName)) return;
-    // Links inside AI responses open in the default browser and must never
-    // navigate the popout document itself (that would tear down the portal).
-    const openExternally = (url) => {
-      if (/^https?:\/\//.test(url)) {
-        shell.openExternal(url).catch((err) => {
-          console.error('Failed to open external URL from AI popout:', err);
-        });
-      }
-    };
-    childWindow.webContents.setWindowOpenHandler(({ url }) => {
-      openExternally(url);
-      return { action: 'deny' };
-    });
-    childWindow.webContents.on('will-navigate', (event, url) => {
-      event.preventDefault();
-      openExternally(url);
-    });
   });
 
   mainWindow.webContents.on('did-finish-load', async () => {
@@ -571,8 +527,6 @@ app.on('ready', async () => {
   registerGitIpc(mainWindow);
   registerOpenAPISyncIpc(mainWindow);
   registerMockServerIpc(mainWindow);
-  registerAiIpc(mainWindow);
-  registerAiAutocompleteIpc(mainWindow);
   registerMountIpc();
   sqliteService.openDatabase();
   clearAllRunnerResponses().catch((err) => console.warn('[runner] failed to clear stored responses', err));

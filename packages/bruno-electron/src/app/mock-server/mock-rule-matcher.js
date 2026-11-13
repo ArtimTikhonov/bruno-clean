@@ -1,4 +1,4 @@
-const { isSensitiveName, REDACTED_VALUE } = require('../../ipc/ai/context');
+const { isSensitiveName, REDACTED_VALUE } = require('./sensitive-fields');
 
 const getJsonPathValue = (body, jsonPath) => {
   if (body === undefined || body === null) {

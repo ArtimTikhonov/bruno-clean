@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import i18n from 'src/i18n';
+import i18n, { englishTermsEnabled } from 'src/i18n';
 import { get } from 'lodash';
 import { useDispatch } from 'react-redux';
 import { refreshScreenWidth, hydrateSidebarState } from 'providers/ReduxStore/slices/app';
@@ -23,7 +23,7 @@ export const AppProvider = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    window.ipcRenderer?.send('renderer:ui-language', i18n.language);
+    window.ipcRenderer?.send('renderer:ui-language', i18n.language, englishTermsEnabled);
     dispatch(refreshScreenWidth());
     dispatch(hydrateSidebarState());
     // v3.5.0 v4 migration tab state; feature was removed from main.

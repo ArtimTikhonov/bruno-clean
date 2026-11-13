@@ -20,13 +20,11 @@ import {
   IconAppWindow,
   IconTransform
 } from '@tabler/icons';
-import IconSparkles from 'components/Icons/IconSparkles';
 import OpenAPISyncIcon from 'components/Icons/OpenAPISync';
 import { switchWorkspace, renameWorkspaceAction, exportWorkspaceAction, confirmWorkspaceCreation, cancelWorkspaceCreation } from 'providers/ReduxStore/slices/workspaces/actions';
 import { updateWorkspace } from 'providers/ReduxStore/slices/workspaces';
 import { showInFolder } from 'providers/ReduxStore/slices/collections/actions';
 import { toggleCollectionFileMode } from 'providers/ReduxStore/slices/collections';
-import { toggleAiSidebar } from 'providers/ReduxStore/slices/chat';
 import { showMigrateToYmlModal } from 'providers/ReduxStore/slices/collection-migration';
 import { findItemInCollection, findItemInCollectionByPathname, getWorkspaceCollections } from 'utils/collections';
 import get from 'lodash/get';
@@ -68,9 +66,6 @@ const CollectionHeader = ({ collection, isScratchCollection }) => {
   const activeWorkspaceUid = useSelector((state) => state.workspaces.activeWorkspaceUid);
   const activeTabUid = useSelector(selectActiveTabUid);
   const focusedTab = useSelector(selectActiveTab);
-  const preferences = useSelector((state) => state.app.preferences);
-  const isAiEnabled = get(preferences, 'ai.enabled', false);
-  const isAiSidebarOpen = useSelector((state) => state.chat.isOpen);
 
   // Get the current active workspace
   const currentWorkspace = useSelector(selectActiveWorkspace);
@@ -738,19 +733,6 @@ const CollectionHeader = ({ collection, isScratchCollection }) => {
                     </button>
                   </ToolHint>
                 </div>
-              )}
-              {isAiEnabled && (
-                <ToolHint text="AI Assistant" toolhintId="AiAssistantToolhintId" place="bottom">
-                  <ActionIcon
-                    onClick={() => dispatch(toggleAiSidebar())}
-                    aria-label="AI Assistant"
-                    size="sm"
-                    data-testid="ai-assistant"
-                    className={isAiSidebarOpen ? 'active' : ''}
-                  >
-                    <IconSparkles size={16} strokeWidth={1.5} />
-                  </ActionIcon>
-                </ToolHint>
               )}
               {collection.format === 'bru' && !migratePillDismissed && (
                 <div

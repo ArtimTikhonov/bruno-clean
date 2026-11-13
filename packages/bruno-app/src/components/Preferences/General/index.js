@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useCallback, useState } from 'react';
-import i18n, { LANGUAGE_STORAGE_KEY } from 'src/i18n';
+import i18n, { LANGUAGE_STORAGE_KEY, ENGLISH_TERMS_STORAGE_KEY, englishTermsEnabled } from 'src/i18n';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import { useFormik } from 'formik';
@@ -15,6 +15,7 @@ import { SettingsGroup, CheckboxSetting, SettingsField } from '../SettingsLayout
 
 const General = () => {
   const [language, setLanguage] = useState(i18n.language);
+  const [englishTerms, setEnglishTerms] = useState(englishTermsEnabled);
   const preferences = useSelector((state) => state.app.preferences);
   const dispatch = useDispatch();
   // The file input is hidden; the visible button forwards its click here.
@@ -211,8 +212,24 @@ const General = () => {
               <option value="ru">Русский</option>
               <option value="en">English</option>
             </select>
-            <p>Restart Bruno Clean to apply the language change.</p>
+            <p>Restart Bruno to apply language and terminology changes.</p>
           </SettingsField>
+          <CheckboxSetting
+            id="english-it-terms"
+            label="Keep common IT terms in English"
+            checked={englishTerms}
+            onChange={(event) => {
+              const enabled = event.target.checked;
+              try {
+                window.localStorage.setItem(ENGLISH_TERMS_STORAGE_KEY, String(enabled));
+                setEnglishTerms(enabled);
+              } catch {
+                toast.error('Failed to save preferences');
+              }
+            }}
+          >
+            <p>In Russian, keep terms such as Headers, Body, Query Params, Token and Proxy in English.</p>
+          </CheckboxSetting>
         </SettingsGroup>
         <SettingsGroup title="Certificates">
           <CheckboxSetting

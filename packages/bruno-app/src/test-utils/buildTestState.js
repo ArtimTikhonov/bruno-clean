@@ -44,8 +44,7 @@ const defaults = () => ({
     sidebarCollapsed: false,
     screenWidth: 1280
   },
-  logs: { isConsoleOpen: false },
-  chat: { isOpen: false, isPoppedOut: false }
+  logs: { isConsoleOpen: false }
 });
 
 export const buildTestState = (overrides = {}) => {

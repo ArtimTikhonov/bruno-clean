@@ -1,4 +1,4 @@
-# Bruno Clean
+# Bruno
 
 Unofficial fork of [Bruno](https://github.com/usebruno/bruno), maintained by ArtimTikhonov.
 This fork removes the Golden Edition promotion, the upstream remote announcement feed,
@@ -9,7 +9,7 @@ It contains only the functionality available in the open-source repository.
 
 Download from the [latest release](https://github.com/ArtimTikhonov/bruno-clean/releases/latest):
 
-- Windows x64: run the `bruno-clean_*_x64_setup.exe` installer.
+- Windows x64: run the `bruno_*_x64_setup.exe` installer.
 - Linux x64: make the AppImage executable, then run it.
 
 Releases are published only after both platforms pass their startup checks.
@@ -21,6 +21,10 @@ Windows installers are unsigned.
 окружения и сообщения интерфейса. Чтобы выбрать английский, откройте
 **Настройки → Основные → Язык**, затем перезапустите приложение.
 Данные запросов, ответы API, имена переменных и код не переводятся.
+
+В этом же разделе можно включить **Оставлять привычные IT-термины на английском**:
+Headers, Body, Query Params, Token, Proxy, Cache и другие названия останутся
+английскими. Изменение применяется после перезапуска. ИИ-функции удалены из этой сборки.
 
 Russian is the default UI language. Select English under
 **Preferences → General → Language**, then restart the app to apply it.

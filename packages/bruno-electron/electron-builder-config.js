@@ -4,7 +4,7 @@ const isBenchmark = process.env.BRUNO_BENCHMARK === 'true';
 
 const config = {
   appId: 'io.github.artimtikhonov.bruno-clean',
-  productName: isBenchmark ? 'Bruno Clean Benchmark' : 'Bruno Clean',
+  productName: isBenchmark ? 'Bruno Benchmark' : 'Bruno',
   extraMetadata: {
     name: 'bruno-clean',
     brunoBuild: {
@@ -18,6 +18,10 @@ const config = {
     output: 'out'
   },
   extraResources: [
+    {
+      from: '../bruno-app/src/i18n/translation/ui.ru-it.json',
+      to: 'ui.ru-it.json'
+    },
     {
       from: '../bruno-app/src/i18n/translation/ui.ru.json',
       to: 'ui.ru.json'
@@ -72,7 +76,7 @@ const config = {
   },
   linux: {
     executableName: 'bruno-clean',
-    artifactName: 'bruno-clean_${version}_${arch}_${os}.${ext}',
+    artifactName: 'bruno_${version}_${arch}_${os}.${ext}',
     icon: 'resources/icons/png',
     target: [
       {
@@ -127,7 +131,7 @@ const config = {
   },
   win: {
     executableName: 'bruno-clean',
-    artifactName: 'bruno-clean_${version}_${arch}_setup.${ext}',
+    artifactName: 'bruno_${version}_${arch}_setup.${ext}',
     icon: 'resources/icons/win/icon.ico',
     target: [
       {

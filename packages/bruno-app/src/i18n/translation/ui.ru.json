@@ -2141,7 +2141,6 @@
   "Open Recent": "Недавние коллекции",
   "Clear Recent": "Очистить список недавних",
   "Actual Size": "Исходный масштаб",
-  "About Bruno Clean": "О Bruno Clean",
   "{{value0}} request{{value1}} in collection": "В коллекции: {{value0}} {{value1}}",
   "Export {{value0}} Environment{{value1}}": "Экспортировать: {{value0}} {{value1}}",
   "{{value0}} result{{value1}} found": "Найдено: {{value0}} {{value1}}",
@@ -2180,5 +2179,7 @@
   "Close Bruno": "Закрыть Bruno",
   "Language": "Язык",
   "Interface language": "Язык интерфейса",
-  "Restart Bruno Clean to apply the language change.": "Перезапустите Bruno Clean, чтобы применить выбранный язык."
+  "Restart Bruno to apply language and terminology changes.": "Перезапустите Bruno, чтобы применить язык и терминологию.",
+  "Keep common IT terms in English": "Оставлять привычные IT-термины на английском",
+  "In Russian, keep terms such as Headers, Body, Query Params, Token and Proxy in English.": "В русском интерфейсе сохранять английские названия: Headers, Body, Query Params, Token, Proxy и другие."
 }

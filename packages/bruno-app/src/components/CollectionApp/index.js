@@ -22,8 +22,6 @@ import { saveRequest } from 'providers/ReduxStore/slices/collections/actions';
 import { addLog } from 'providers/ReduxStore/slices/logs';
 import { useTheme } from 'providers/Theme';
 import CodeEditor from 'components/CodeEditor';
-import AIAssist from 'components/AIAssist';
-import { buildAiVariablesPayload, buildDocsContextFromCollection } from 'utils/ai';
 import StyledWrapper from './StyledWrapper';
 import AppWebviewPane from 'components/AppWebviewPane';
 import EmptyAppState from 'components/EmptyAppState';
@@ -205,8 +203,6 @@ const CollectionApp = ({ item, collection }) => {
     () => ({ name: collection?.name || null, pathname: collection?.pathname || null }),
     [collection?.name, collection?.pathname]
   );
-  const docsContext = useMemo(() => buildDocsContextFromCollection(collection), [collection]);
-  const aiVariables = useMemo(() => buildAiVariablesPayload(collection, null), [collection]);
 
   const onEdit = useCallback(
     (value) => dispatch(updateAppCode({ code: value, itemUid: item.uid, collectionUid: collection.uid })),
@@ -349,15 +345,6 @@ const CollectionApp = ({ item, collection }) => {
       <div className="app-toolbar">
         <span>App - {item.name}</span>
         <div className="flex items-center gap-2">
-          {view === 'code' && (
-            <AIAssist
-              scriptType="app-collection"
-              currentScript={code || ''}
-              docsContext={docsContext}
-              variables={aiVariables}
-              onApply={onEdit}
-            />
-          )}
           <div className="view-toggle" data-testid="collection-app-view-toggle">
             <button
               type="button"

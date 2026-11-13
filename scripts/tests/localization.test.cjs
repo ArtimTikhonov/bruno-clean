@@ -127,6 +127,27 @@ test('native menu localization preserves commands and does not mutate the templa
   assert.equal(template[0].submenu[0].label, 'Open Collection');
 });
 
+test('English IT terminology changes only presentation and preserves Russian actions', async () => {
+  const terms = require('../../packages/bruno-app/src/i18n/translation/ui.ru-it.json');
+  const engine = i18next.createInstance();
+  await engine.init({ lng: 'ru', initImmediate: false, keySeparator: false, nsSeparator: false,
+    resources: { ru: { ui: { ...ru, ...terms } } }, interpolation: { escapeValue: false } });
+  const source = readFileSync(path.join(sourceRoot, 'i18n/ui.js'), 'utf8')
+    .replace("import i18n from './index';", '')
+    .replace('export const translateUi', 'const translateUi');
+  const translate = vm.runInNewContext(`${source}\ntranslateUi;`, { i18n: engine });
+  for (const term of ['Headers', 'Body', 'Query Params', 'Token', 'Proxy', 'Cache']) {
+    assert.equal(translate(term), term);
+    assert.notEqual(ru[term], term, term);
+  }
+  assert.equal(translate('Save'), 'Сохранить');
+  assert.equal(translate('Inherited from {{value0}}', { value0: 'Заголовки' }), 'Наследуется из Заголовки');
+  const placeholders = (text) => [...text.matchAll(/\{\{([^}]+)\}\}/g)].map((match) => match[1]).sort();
+  for (const [key, value] of Object.entries(terms)) assert.deepEqual(placeholders(key), placeholders(value));
+  const localizeMenu = require('../../packages/bruno-electron/src/app/localize-menu');
+  assert.equal(localizeMenu([{ label: 'Proxy' }], 'ru', { ...ru, ...terms })[0].label, 'Proxy');
+});
+
 test('all production UI files remain valid after localization', () => {
   const walk = (directory) => {
     for (const entry of readdirSync(directory, { withFileTypes: true })) {
@@ -139,4 +160,14 @@ test('all production UI files remain valid after localization', () => {
     }
   };
   for (const folder of ['components', 'pages', 'ui', 'hooks']) walk(path.join(sourceRoot, folder));
+});
+
+test('mock server still matches secrets while redacting its diagnostics after AI removal', () => {
+  const { evaluateConditionDetail } = require('../../packages/bruno-electron/src/app/mock-server/mock-rule-matcher');
+  const context = { headers: { authorization: 'secret-token', accept: 'application/json' } };
+  const match = evaluateConditionDetail({ target: 'header', key: 'authorization', value: 'secret-token' }, context);
+  assert.equal(match.pass, true);
+  assert.equal(match.actual, '<redacted>');
+  assert.equal(evaluateConditionDetail({ target: 'header', key: 'accept', value: 'application/json' }, context).actual, 'application/json');
+  assert.equal(context.headers.authorization, 'secret-token');
 });

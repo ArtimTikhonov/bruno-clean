@@ -1,6 +1,6 @@
-# Bruno Clean attribution
+# Bruno attribution
 
-Bruno Clean is an unofficial fork maintained by ArtimTikhonov.
+Bruno is an unofficial fork maintained by ArtimTikhonov.
 It is not affiliated with or endorsed by Bruno Software Inc.
 
 Original Bruno source: https://github.com/usebruno/bruno

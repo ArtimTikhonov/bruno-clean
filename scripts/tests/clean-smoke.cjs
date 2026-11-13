@@ -26,7 +26,7 @@ const os = require('node:os');
     });
     const window = await app.firstWindow();
     currentWindow = window;
-    await expect(window).toHaveTitle('Bruno Clean', { timeout: 60000 });
+    await expect(window).toHaveTitle('Bruno', { timeout: 60000 });
     await expect(window.getByRole('button', { name: 'Открыть настройки', exact: true })).toBeVisible({ timeout: 60000 });
     // Onboarding is intentionally omitted when an existing profile is detected.
     if (await window.getByTestId('welcome-modal').isVisible()) {
@@ -37,10 +37,29 @@ const os = require('node:os');
     await window.getByRole('button', { name: 'Открыть настройки', exact: true }).click();
     await expect(window.getByText('Основные настройки', { exact: true })).toBeVisible();
     await expect(window.getByTestId('interface-language')).toHaveValue('ru');
+    await expect(window.locator('#english-it-terms')).not.toBeChecked();
+    await expect(window.getByRole('tab', { name: 'AI', exact: true })).toHaveCount(0);
+    await expect(window.getByRole('tab', { name: 'Прокси', exact: true })).toBeVisible();
     await expect(window.getByLabel('Check all Notifications')).toHaveCount(0);
     await expect(window.getByText('Golden Edition', { exact: true })).toHaveCount(0);
     await window.screenshot({ path: 'bruno-clean-smoke.png' });
-    await window.getByTestId('interface-language').selectOption('en');
+    await window.locator('#english-it-terms').check();
+    await app.close();
+    app = await electron.launch({
+      executablePath: process.env.BRUNO_CLEAN_EXECUTABLE || path.join(__dirname, executable),
+      env: environment,
+      args: [`--user-data-dir=${profile}`, '--no-sandbox'],
+      timeout: 60000
+    });
+    const termsWindow = await app.firstWindow();
+    currentWindow = termsWindow;
+    await termsWindow.getByRole('button', { name: 'Открыть настройки', exact: true }).click({ timeout: 60000 });
+    await expect(termsWindow.getByTestId('interface-language')).toHaveValue('ru');
+    await expect(termsWindow.locator('#english-it-terms')).toBeChecked();
+    await expect(termsWindow.getByRole('tab', { name: 'Proxy', exact: true })).toBeVisible();
+    await expect(termsWindow.getByRole('tab', { name: 'Cache', exact: true })).toBeVisible();
+    await termsWindow.screenshot({ path: 'bruno-clean-smoke.png' });
+    await termsWindow.getByTestId('interface-language').selectOption('en');
     await app.close();
     app = await electron.launch({
       executablePath: process.env.BRUNO_CLEAN_EXECUTABLE || path.join(__dirname, executable),
@@ -54,7 +73,7 @@ const os = require('node:os');
     await englishWindow.getByRole('button', { name: 'Open Preferences', exact: true }).click();
     await expect(englishWindow.getByText('General Settings', { exact: true })).toBeVisible();
     await expect(englishWindow.getByTestId('interface-language')).toHaveValue('en');
-    console.log('Russian UI and persisted English selection both work in the packaged application.');
+    console.log('Russian UI, persisted IT terminology and English selection work in the packaged application.');
   } catch (error) {
     if (currentWindow) {
       await currentWindow.screenshot({ path: 'bruno-clean-smoke.png' }).catch(() => {});

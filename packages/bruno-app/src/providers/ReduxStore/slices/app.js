@@ -72,28 +72,6 @@ const initialState = {
       sslSession: {
         enabled: false
       }
-    },
-    ai: {
-      enabled: false,
-      providers: {
-        openai: { enabled: false },
-        anthropic: { enabled: false }
-      },
-      models: {},
-      defaultModel: '',
-      autocomplete: {
-        enabled: true,
-        model: '',
-        triggerMode: 'debounced'
-      },
-      security: {
-        redactHeaders: true,
-        redactBody: true,
-        redactVariables: true,
-        redactResponse: true,
-        customRedactedHeaders: [],
-        customRedactedVariables: []
-      }
     }
   },
   generateCode: {

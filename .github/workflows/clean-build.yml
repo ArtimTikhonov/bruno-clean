@@ -64,6 +64,24 @@ jobs:
           packages/bruno-app/src/components/Preferences/Keybindings/index.js
           packages/bruno-app/src/components/ChangelogTab/index.js
           packages/bruno-app/plugins/ui-translations/index.cjs
+          packages/bruno-app/src/components/CodeEditor/index.js
+          packages/bruno-app/src/components/CollectionApp/index.js
+          packages/bruno-app/src/components/CollectionSettings/index.js
+          packages/bruno-app/src/components/FolderSettings/index.js
+          packages/bruno-app/src/components/Preferences/index.js
+          packages/bruno-app/src/components/Preferences/Beta/index.js
+          packages/bruno-app/src/components/RequestTabs/CollectionHeader/index.js
+          packages/bruno-app/src/components/RequestPane/HttpRequestPane/index.js
+          packages/bruno-app/src/components/RequestPane/GraphQLRequestPane/index.js
+          packages/bruno-app/src/components/RequestPane/GrpcRequestPane/index.js
+          packages/bruno-app/src/components/RequestPane/WSRequestPane/index.js
+          packages/bruno-app/src/pages/Bruno/index.js
+          packages/bruno-app/src/providers/ReduxStore/index.js
+          packages/bruno-app/src/providers/ReduxStore/slices/app.js
+          packages/bruno-app/src/providers/ReduxStore/slices/workspaces/actions.js
+          packages/bruno-electron/src/store/preferences.js
+          packages/bruno-electron/src/app/mock-server/mock-rule-matcher.js
+          packages/bruno-electron/src/app/mock-server/sensitive-fields.js
       - name: Build renderer
         run: npm run build:web
       - name: Prepare Electron renderer
@@ -135,5 +153,5 @@ jobs:
           gh release create "clean-build-${GITHUB_RUN_NUMBER}"
           dist/*
           --target "$GITHUB_SHA"
-          --title "Bruno Clean - Windows and Linux build ${GITHUB_RUN_NUMBER}"
-          --notes "Bruno Clean with Russian UI enabled by default. Switch to English in Preferences > General > Language and restart. Includes translations of menus, preferences, request editing, environments and UI messages. Request and response data, code, URLs and variable names are preserved. Windows x64 NSIS installer and Linux x64 AppImage. Both builds passed localization tests and packaged startup tests in Russian and English; the Windows installer was also installed and tested. No paid-feature promotions or upstream announcement feed. Windows binaries are unsigned. Original licenses and artwork attribution are included."
+          --title "Bruno - Windows and Linux build ${GITHUB_RUN_NUMBER}"
+          --notes "Unofficial Bruno fork. AI chat, generation, autocomplete and provider SDKs removed. Russian UI by default, optional English IT terminology in Preferences > General > Language. Restart to apply language and terminology changes. Request/response data and code remain untouched. Windows x64 installer and Linux x64 AppImage verified in Russian, Russian with English terms, and English. No paid-feature promotions or remote announcements. Original licenses and artwork attribution preserved. Windows binaries are unsigned."
