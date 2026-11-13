@@ -1,0 +1,65 @@
+name: Bruno Clean Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: clean-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      NODE_OPTIONS: '--max-old-space-size=6144'
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - name: Verify announcement isolation
+        run: node --test scripts/tests/notifications.test.cjs
+      - name: Install dependencies and build shared packages
+        uses: ./.github/actions/common/setup-node-deps
+      - name: Lint changed JavaScript
+        run: >-
+          npm run lint --
+          packages/bruno-app/src/components/StatusBar/index.js
+          packages/bruno-electron/src/ipc/notifications.js
+          packages/bruno-electron/src/index.js
+          packages/bruno-electron/src/app/menu-template.js
+          packages/bruno-electron/src/app/about-bruno.js
+          packages/bruno-electron/electron-builder-config.js
+      - name: Build renderer
+        run: npm run build:web
+      - name: Prepare Electron renderer
+        run: node scripts/prepare-clean-electron.cjs
+      - name: Package Linux AppImage
+        run: npm run dist:linux --workspace=packages/bruno-electron -- --x64 --publish never
+      - name: Install desktop test dependencies
+        run: sudo apt-get update && sudo apt-get install -y xvfb libgtk-3-0 libnss3 libasound2t64 libgbm1
+      - name: Smoke test packaged app
+        run: xvfb-run -a node scripts/tests/clean-smoke.cjs
+      - name: Upload smoke test screenshot
+        uses: actions/upload-artifact@v6
+        with:
+          name: bruno-clean-smoke
+          path: bruno-clean-smoke.png
+      - name: Upload Linux app
+        uses: actions/upload-artifact@v6
+        with:
+          name: bruno-clean-linux-x64
+          path: packages/bruno-electron/out/*.AppImage
+          if-no-files-found: error
+          retention-days: 30

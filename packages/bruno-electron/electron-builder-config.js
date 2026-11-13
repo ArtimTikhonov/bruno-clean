@@ -3,9 +3,10 @@ require('dotenv').config({ path: process.env.DOTENV_PATH });
 const isBenchmark = process.env.BRUNO_BENCHMARK === 'true';
 
 const config = {
-  appId: 'com.usebruno.app',
-  productName: isBenchmark ? 'Bruno Benchmark' : 'Bruno',
+  appId: 'io.github.artimtikhonov.bruno-clean',
+  productName: isBenchmark ? 'Bruno Clean Benchmark' : 'Bruno Clean',
   extraMetadata: {
+    name: 'bruno-clean',
     brunoBuild: {
       benchmark: isBenchmark,
       builtAt: new Date().toISOString()
@@ -58,7 +59,8 @@ const config = {
     ]
   },
   linux: {
-    artifactName: '${name}_${version}_${arch}_${os}.${ext}',
+    executableName: 'bruno-clean',
+    artifactName: 'bruno-clean_${version}_${arch}_${os}.${ext}',
     icon: 'resources/icons/png',
     target: [
       {

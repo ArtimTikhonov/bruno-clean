@@ -1,3 +1,42 @@
+# Bruno Clean
+
+Unofficial fork of [Bruno](https://github.com/usebruno/bruno), maintained by ArtimTikhonov.
+This fork removes the Golden Edition promotion, the upstream remote announcement feed,
+and the product marketing page embedded in the changelog tab.
+It contains only the functionality available in the open-source repository.
+
+## Download this fork
+
+Open [Bruno Clean Build](https://github.com/ArtimTikhonov/bruno-clean/actions/workflows/clean-build.yml),
+select a successful run and download the `bruno-clean-linux-x64` artifact.
+Extract it, make the AppImage executable, and run it. The artifact requires GitHub login
+and is retained for 30 days; the workflow can be run again from the Actions tab.
+
+## Build from source
+
+Use the Node.js version in `.nvmrc`, then run:
+
+```sh
+npm run setup
+npm run dev
+```
+
+The build workflow also checks JavaScript, builds the renderer, packages the app,
+and tests that the announcement IPC clears announcements without fetching remote content.
+
+## Credits and license
+
+Original code: Anoop M D, Anusree P S and Contributors, under the [MIT license](license.md).
+Existing copyright and license notices are preserved. Bruno is a trademark of Anoop M D;
+this fork is not an official Bruno release and is not affiliated with Bruno Software Inc.
+The retained upstream dog artwork comes from [OpenMoji](https://openmoji.org/),
+licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+
+The upstream documentation below describes Bruno and may refer to upstream packages
+or installers. For this fork, use the build and download instructions above.
+
+---
+
 <br />
 <img src="assets/images/logo-transparent.png" width="80"/>
 
@@ -46,13 +85,6 @@ Bruno is offline-only. There are no plans to add cloud-sync to Bruno, ever. We v
 
 ![bruno](assets/images/landing-2-dark.png#gh-light-mode-only)
 ![bruno](assets/images/landing-2-light.png#gh-dark-mode-only) <br /><br />
-
-## Commercial Versions ✨
-
-Majority of our features are free and open source.
-We strive to strike a harmonious balance between [open-source principles and sustainability](https://github.com/usebruno/bruno/discussions/269)
-
-You can explore our [paid versions](https://www.usebruno.com/pricing) to see if there are additional features that you or your team may find useful! <br/>
 
 ## Table of Contents
 

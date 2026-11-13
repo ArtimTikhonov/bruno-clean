@@ -6,7 +6,6 @@ import Mousetrap from 'mousetrap';
 import { getKeyBindingsForActionAllOS } from 'providers/Hotkeys/keyMappings';
 import ToolHint from 'components/ToolHint';
 import Cookies from 'components/Cookies';
-import Notifications from 'components/Notifications';
 import Portal from 'components/Portal';
 import ThemeDropdown from './ThemeDropdown';
 import { openConsole } from 'providers/ReduxStore/slices/logs';
@@ -93,17 +92,11 @@ const StatusBar = () => {
               </button>
             </ThemeDropdown>
 
-            <ToolHint text="Notifications" toolhintId="Notifications" place="top" offset={10}>
-              <div className="status-bar-button">
-                <Notifications />
-              </div>
-            </ToolHint>
-
             <ToolHint text="GitHub Repository" toolhintId="GitHub" place="top" offset={10}>
               <button
                 className="status-bar-button"
                 onClick={() => {
-                  window?.ipcRenderer?.openExternal('https://github.com/usebruno/bruno');
+                  window?.ipcRenderer?.openExternal('https://github.com/ArtimTikhonov/bruno-clean');
                 }}
                 tabIndex={0}
                 aria-label="Open GitHub Repository"
