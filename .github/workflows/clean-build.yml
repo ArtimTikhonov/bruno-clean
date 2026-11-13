@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
+    tags: ['v*']
     paths-ignore:
       - 'docs/**'
       - '*.md'
@@ -39,6 +40,10 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: npm
+      - name: Verify release version and changelog
+        run: node scripts/version.cjs check
+      - name: Test version management
+        run: node --test scripts/tests/version.test.cjs
       - name: Verify announcement isolation
         run: node --test scripts/tests/notifications.test.cjs
       - name: Install dependencies and build shared packages
@@ -134,10 +139,18 @@ jobs:
   release:
     name: Publish verified builds
     needs: build
+    if: startsWith(github.ref, 'refs/tags/v') && github.event_name == 'push'
     runs-on: ubuntu-24.04
     permissions:
       contents: write
     steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - name: Verify release tag
+        id: version
+        run: node scripts/version.cjs check
       - uses: actions/download-artifact@v6
         with:
           pattern: bruno-clean-app-*
@@ -146,13 +159,24 @@ jobs:
       - name: Generate checksums
         working-directory: dist
         run: sha256sum *.AppImage *.exe > SHA256SUMS.txt
+      - name: Prepare release notes
+        run: node scripts/version.cjs notes > release-notes.md
       - name: Publish Linux and Windows builds
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-        run: >-
-          gh release create "clean-build-${GITHUB_RUN_NUMBER}"
-          dist/*
-          --target "$GITHUB_SHA"
-          --title "Bruno - Windows and Linux build ${GITHUB_RUN_NUMBER}"
-          --notes "Unofficial Bruno fork. AI chat, generation, autocomplete and provider SDKs removed. Russian UI by default, optional English IT terminology in Preferences > General > Language. Restart to apply language and terminology changes. Request/response data and code remain untouched. Windows x64 installer and Linux x64 AppImage verified in Russian, Russian with English terms, and English. No paid-feature promotions or remote announcements. Original licenses and artwork attribution preserved. Windows binaries are unsigned."
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+          RELEASE_VERSION: ${{ steps.version.outputs.version }}
+          PRERELEASE: ${{ steps.version.outputs.prerelease }}
+        run: |
+          options=()
+          if [ "$PRERELEASE" = "true" ]; then
+            options+=(--prerelease --latest=false)
+          else
+            options+=(--latest)
+          fi
+          gh release create "$RELEASE_TAG" dist/* \
+            --verify-tag \
+            --title "Bruno $RELEASE_VERSION" \
+            --notes-file release-notes.md \
+            "${options[@]}"

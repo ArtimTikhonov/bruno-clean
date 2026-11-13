@@ -2,6 +2,7 @@ const { _electron: electron, expect } = require('@playwright/test');
 const path = require('node:path');
 const fs = require('node:fs');
 const os = require('node:os');
+const { version } = require('../../package.json');
 
 (async () => {
   const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'bruno-clean-smoke-'));
@@ -26,6 +27,7 @@ const os = require('node:os');
     });
     const window = await app.firstWindow();
     currentWindow = window;
+    expect(await app.evaluate(({ app }) => app.getVersion())).toBe(version);
     await expect(window).toHaveTitle('Bruno', { timeout: 60000 });
     await expect(window.getByRole('button', { name: 'Открыть настройки', exact: true })).toBeVisible({ timeout: 60000 });
     // Onboarding is intentionally omitted when an existing profile is detected.
