@@ -45,6 +45,8 @@ jobs:
         uses: ./.github/actions/common/setup-node-deps
         with:
           shell: ${{ matrix.shell }}
+      - name: Verify localization and data preservation
+        run: node --test scripts/tests/localization.test.cjs
       - name: Lint changed JavaScript
         run: >-
           npm run lint --
@@ -54,6 +56,14 @@ jobs:
           packages/bruno-electron/src/app/menu-template.js
           packages/bruno-electron/src/app/about-bruno.js
           packages/bruno-electron/electron-builder-config.js
+          packages/bruno-electron/src/app/localize-menu.js
+          packages/bruno-app/src/i18n/index.js
+          packages/bruno-app/src/i18n/ui.js
+          packages/bruno-app/src/providers/App/index.js
+          packages/bruno-app/src/components/Preferences/General/index.js
+          packages/bruno-app/src/components/Preferences/Keybindings/index.js
+          packages/bruno-app/src/components/ChangelogTab/index.js
+          packages/bruno-app/plugins/ui-translations/index.cjs
       - name: Build renderer
         run: npm run build:web
       - name: Prepare Electron renderer
@@ -125,4 +135,4 @@ jobs:
           dist/*
           --target "$GITHUB_SHA"
           --title "Bruno Clean - Windows and Linux build ${GITHUB_RUN_NUMBER}"
-          --notes "Unofficial MIT-source fork of Bruno without Golden Edition promotions or the upstream announcement feed. Windows x64 NSIS installer and Linux x64 AppImage. Both platforms passed JavaScript linting, the announcement isolation test and a desktop startup check. The Windows installer was also installed and the installed executable tested on a Windows runner. Windows binaries are unsigned. Original licenses and artwork attribution are included."
+          --notes "Bruno Clean with Russian UI enabled by default. Switch to English in Preferences > General > Language and restart. Includes translations of menus, preferences, request editing, environments and UI messages. Request and response data, code, URLs and variable names are preserved. Windows x64 NSIS installer and Linux x64 AppImage. Both builds passed localization tests and packaged startup tests in Russian and English; the Windows installer was also installed and tested. No paid-feature promotions or upstream announcement feed. Windows binaries are unsigned. Original licenses and artwork attribution are included."

@@ -19,6 +19,10 @@ const config = {
   },
   extraResources: [
     {
+      from: '../bruno-app/src/i18n/translation/ui.ru.json',
+      to: 'ui.ru.json'
+    },
+    {
       from: '../../license.md',
       to: 'LICENSE.bruno.txt'
     },

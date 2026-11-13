@@ -1,4 +1,5 @@
-import React, { useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect, useCallback, useState } from 'react';
+import i18n, { LANGUAGE_STORAGE_KEY } from 'src/i18n';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import { useFormik } from 'formik';
@@ -13,6 +14,7 @@ import path from 'utils/common/path';
 import { SettingsGroup, CheckboxSetting, SettingsField } from '../SettingsLayout';
 
 const General = () => {
+  const [language, setLanguage] = useState(i18n.language);
   const preferences = useSelector((state) => state.app.preferences);
   const dispatch = useDispatch();
   // The file input is hidden; the visible button forwards its click here.
@@ -190,6 +192,28 @@ const General = () => {
     <StyledWrapper className="w-full">
       <div className="section-header">General Settings</div>
       <form className="bruno-form settings-form" onSubmit={formik.handleSubmit}>
+        <SettingsGroup title="Language">
+          <SettingsField label="Interface language">
+            <select
+              aria-label="Interface language"
+              data-testid="interface-language"
+              value={language}
+              onChange={(event) => {
+                const nextLanguage = event.target.value;
+                try {
+                  window.localStorage.setItem(LANGUAGE_STORAGE_KEY, nextLanguage);
+                  setLanguage(nextLanguage);
+                } catch {
+                  toast.error('Failed to save preferences');
+                }
+              }}
+            >
+              <option value="ru">Русский</option>
+              <option value="en">English</option>
+            </select>
+            <p>Restart Bruno Clean to apply the language change.</p>
+          </SettingsField>
+        </SettingsGroup>
         <SettingsGroup title="Certificates">
           <CheckboxSetting
             id="sslVerification"

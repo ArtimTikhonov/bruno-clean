@@ -26,7 +26,10 @@ export default defineConfig({
     pluginBabel({
       include: /\.(?:js|jsx|tsx)$/,
       babelLoaderOptions(opts) {
-        opts.plugins?.unshift('babel-plugin-react-compiler');
+        opts.plugins?.unshift(
+          require.resolve('./plugins/ui-translations/index.cjs'),
+          'babel-plugin-react-compiler'
+        );
       }
     }),
     pluginRemoteImages({

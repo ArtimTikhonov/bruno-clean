@@ -17,14 +17,31 @@ const os = require('node:os');
     });
     const window = await app.firstWindow();
     await expect(window).toHaveTitle('Bruno Clean', { timeout: 60000 });
-    await expect(window.getByText('Welcome to Bruno', { exact: true })).toBeVisible({ timeout: 60000 });
+    await expect(window.getByText('Добро пожаловать в Bruno', { exact: true })).toBeVisible({ timeout: 60000 });
+    await window.getByRole('button', { name: 'Пропустить', exact: true }).click();
+    await expect(window.getByTestId('welcome-modal')).toHaveCount(0);
+    await window.getByRole('button', { name: 'Открыть настройки', exact: true }).click();
+    await expect(window.getByText('Основные настройки', { exact: true })).toBeVisible();
+    await expect(window.getByTestId('interface-language')).toHaveValue('ru');
     await expect(window.getByLabel('Check all Notifications')).toHaveCount(0);
     await expect(window.getByText('Golden Edition', { exact: true })).toHaveCount(0);
     await window.screenshot({ path: 'bruno-clean-smoke.png' });
-    console.log('Packaged app starts and renders the welcome screen without promotions.');
+    await window.getByTestId('interface-language').selectOption('en');
+    await app.close();
+    app = await electron.launch({
+      executablePath: process.env.BRUNO_CLEAN_EXECUTABLE || path.join(__dirname, executable),
+      args: [`--user-data-dir=${profile}`, '--no-sandbox'],
+      timeout: 60000
+    });
+    const englishWindow = await app.firstWindow();
+    await expect(englishWindow.getByRole('button', { name: 'Open Preferences', exact: true })).toBeVisible({ timeout: 60000 });
+    await englishWindow.getByRole('button', { name: 'Open Preferences', exact: true }).click();
+    await expect(englishWindow.getByText('General Settings', { exact: true })).toBeVisible();
+    await expect(englishWindow.getByTestId('interface-language')).toHaveValue('en');
+    console.log('Russian UI and persisted English selection both work in the packaged application.');
   } finally {
     if (app) await app.close();
-    fs.rmSync(profile, { recursive: true, force: true });
+    fs.rmSync(profile, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
   }
 })().catch((error) => {
   console.error(error);

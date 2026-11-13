@@ -42,6 +42,10 @@ if (isBenchmarkEnabled()) {
 }
 
 const menuTemplate = require('./app/menu-template');
+const localizeMenu = require('./app/localize-menu');
+const menuTranslations = require(isDev
+  ? path.join(__dirname, '../../bruno-app/src/i18n/translation/ui.ru.json')
+  : path.join(process.resourcesPath, 'ui.ru.json'));
 const { openCollection } = require('./app/collections');
 const registerNetworkIpc = require('./ipc/network');
 const registerCollectionsIpc = require('./ipc/collection');
@@ -110,7 +114,11 @@ const contentSecurityPolicy = [
 
 setContentSecurityPolicy(contentSecurityPolicy.join(';') + ';');
 
-const menu = Menu.buildFromTemplate(menuTemplate);
+const menu = Menu.buildFromTemplate(localizeMenu(menuTemplate, 'ru', menuTranslations));
+ipcMain.on('renderer:ui-language', (event, language) => {
+  if (language !== 'ru' && language !== 'en') return;
+  Menu.setApplicationMenu(Menu.buildFromTemplate(localizeMenu(menuTemplate, language, menuTranslations)));
+});
 const isMac = process.platform === 'darwin';
 const isWindows = process.platform === 'win32';
 const isLinux = process.platform === 'linux';

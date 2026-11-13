@@ -1,4 +1,5 @@
 import React, { useMemo, useRef, useState, useEffect, Fragment } from 'react';
+import { translateUi } from 'src/i18n/ui';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from 'providers/Theme';
 
@@ -799,7 +800,7 @@ const Keybindings = () => {
                 {groupedKeyMappings.map((section, sectionIndex) => (
                   <Fragment key={section.heading}>
                     <tr className="section-heading-row">
-                      <td colSpan={2}>{section.heading}</td>
+                      <td colSpan={2}>{translateUi(section.heading)}</td>
                     </tr>
                     {section.rows.map((row, rowIndex) => {
                       const { action } = row;
@@ -830,7 +831,7 @@ const Keybindings = () => {
                             setHoveredAction((prev) => (prev === action ? null : prev))}
                           onClick={() => !isReadOnly && !isEditing && startEditing(action)}
                         >
-                          <td data-testid={`keybinding-name-${action}`}>{row.name}</td>
+                          <td data-testid={`keybinding-name-${action}`}>{translateUi(row.name)}</td>
 
                           <td>
                             <div className="keybinding-row">

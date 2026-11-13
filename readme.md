@@ -15,6 +15,16 @@ Download from the [latest release](https://github.com/ArtimTikhonov/bruno-clean/
 Releases are published only after both platforms pass their startup checks.
 Windows installers are unsigned.
 
+## Язык интерфейса / Interface language
+
+Русский язык включён по умолчанию. Переведены меню, настройки, редактор запросов,
+окружения и сообщения интерфейса. Чтобы выбрать английский, откройте
+**Настройки → Основные → Язык**, затем перезапустите приложение.
+Данные запросов, ответы API, имена переменных и код не переводятся.
+
+Russian is the default UI language. Select English under
+**Preferences → General → Language**, then restart the app to apply it.
+
 The [build workflow](https://github.com/ArtimTikhonov/bruno-clean/actions/workflows/clean-build.yml)
 also retains the installers and startup screenshots as downloadable artifacts for 30 days.
 

@@ -4,13 +4,15 @@ import Markdown from 'components/MarkDown';
 import { addTab } from 'providers/ReduxStore/slices/tabs';
 import { updateActivePreferencesTab } from 'providers/ReduxStore/slices/app';
 import changelogContent from './CHANGELOG.md';
+import changelogRu from './CHANGELOG.ru.md';
+import i18n from 'src/i18n';
 import StyledWrapper from './StyledWrapper';
 
 const PREFERENCE_LINKS = {
   // Preferences links mapping
 };
 
-const content = changelogContent;
+const content = i18n.language === 'ru' ? changelogRu : changelogContent;
 
 const ChangelogTab = ({ collectionUid }) => {
   const dispatch = useDispatch();
