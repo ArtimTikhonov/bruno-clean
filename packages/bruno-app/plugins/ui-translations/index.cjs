@@ -63,42 +63,41 @@ const getUiText = (nodePath) => {
 module.exports = ({ types: t }) => ({
   name: 'bruno-clean-ui-translations',
   visitor: {
-    Program: {
-      enter(nodePath, state) {
-        const filename = (state.filename || '').replace(/\\/g, '/');
-        state.translateUi = /\/src\/(components|ui|pages|hooks)\//.test(filename)
-          && !/\.(spec|test)\./.test(filename);
-        state.uiTranslationId = nodePath.scope.generateUidIdentifier('translateUi');
-        state.usedUiTranslations = false;
-      },
-      exit(nodePath, state) {
-        if (!state.usedUiTranslations) return;
-        nodePath.unshiftContainer('body', t.importDeclaration([
-          t.importSpecifier(state.uiTranslationId, t.identifier('translateUi'))
+    Program(programPath, state) {
+      const filename = (state.filename || '').replace(/\\/g, '/');
+      if (!/\/src\/(components|ui|pages|hooks)\//.test(filename) || /\.(spec|test)\./.test(filename)) return;
+      const translationId = programPath.scope.generateUidIdentifier('translateUi');
+      let used = false;
+      // Finish localization before React Compiler's Program visitor hoists JSX
+      // expressions into temporaries and removes their presentation context.
+      programPath.traverse({
+        'JSXText|StringLiteral|TemplateLiteral'(nodePath) {
+          const text = getUiText(nodePath);
+          if (!text || !Object.hasOwn(translations, text.trim())) return;
+          const args = [t.stringLiteral(text)];
+          if (nodePath.isTemplateLiteral() && nodePath.node.expressions.length) {
+            args.push(t.objectExpression(nodePath.node.expressions.map((expression, index) =>
+              t.objectProperty(t.identifier(`value${index}`), expression)
+            )));
+          }
+          if (nodePath.isJSXText() && nodePath.parentPath.isJSXElement()) {
+            const opening = nodePath.parentPath.node.openingElement;
+            if (opening.name.name === 'option' && !opening.attributes.some((attribute) => attribute.name?.name === 'value')) {
+              opening.attributes.push(t.jsxAttribute(t.jsxIdentifier('value'), t.stringLiteral(text.trim())));
+            }
+          }
+          const call = t.callExpression(t.cloneNode(translationId), args);
+          const needsContainer = nodePath.isJSXText() || nodePath.parentPath.isJSXAttribute();
+          nodePath.replaceWith(needsContainer ? t.jsxExpressionContainer(call) : call);
+          used = true;
+          nodePath.skip();
+        }
+      });
+      if (used) {
+        programPath.unshiftContainer('body', t.importDeclaration([
+          t.importSpecifier(translationId, t.identifier('translateUi'))
         ], t.stringLiteral('src/i18n/ui')));
       }
-    },
-    'JSXText|StringLiteral|TemplateLiteral'(nodePath, state) {
-      if (!state.translateUi) return;
-      const text = getUiText(nodePath);
-      if (!text || !Object.hasOwn(translations, text.trim())) return;
-      const args = [t.stringLiteral(text)];
-      if (nodePath.isTemplateLiteral() && nodePath.node.expressions.length) {
-        args.push(t.objectExpression(nodePath.node.expressions.map((expression, index) =>
-          t.objectProperty(t.identifier(`value${index}`), expression)
-        )));
-      }
-      if (nodePath.isJSXText() && nodePath.parentPath.isJSXElement()) {
-        const opening = nodePath.parentPath.node.openingElement;
-        if (opening.name.name === 'option' && !opening.attributes.some((attribute) => attribute.name?.name === 'value')) {
-          opening.attributes.push(t.jsxAttribute(t.jsxIdentifier('value'), t.stringLiteral(text.trim())));
-        }
-      }
-      const call = t.callExpression(t.cloneNode(state.uiTranslationId), args);
-      const needsContainer = nodePath.isJSXText() || nodePath.parentPath.isJSXAttribute();
-      nodePath.replaceWith(needsContainer ? t.jsxExpressionContainer(call) : call);
-      state.usedUiTranslations = true;
-      nodePath.skip();
     }
   }
 });

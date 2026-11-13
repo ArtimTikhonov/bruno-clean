@@ -48,6 +48,30 @@ test('leaves non-UI modules and unknown strings untouched', () => {
   assert.doesNotMatch(transform('const View = () => <span>Untranslated custom phrase</span>;'), /translateUi/);
 });
 
+test('finishes localization before subsequent compiler Program visitors', () => {
+  let inspected = false;
+  const source = 'const Welcome = ({ step }) => <h1>{step === 1 ? "Welcome to Bruno" : "Ready to go!"}</h1>;';
+  babel.transformSync(source, {
+    filename: path.join(sourceRoot, 'components/Welcome.jsx'),
+    babelrc: false,
+    configFile: false,
+    parserOpts: { plugins: ['jsx'] },
+    plugins: [plugin, () => ({ visitor: {
+      Program(nodePath) {
+        const calls = [];
+        nodePath.traverse({
+          CallExpression(callPath) {
+            if (callPath.node.callee.name === '_translateUi') calls.push(callPath.node.arguments[0].value);
+          }
+        });
+        assert.deepEqual(calls, ['Welcome to Bruno', 'Ready to go!']);
+        inspected = true;
+      }
+    } })]
+  });
+  assert.equal(inspected, true);
+});
+
 test('Russian translations preserve interpolation placeholders and contain no duplicate keys', () => {
   const filename = path.join(sourceRoot, 'i18n/translation/ui.ru.json');
   const ast = parser.parseExpression(readFileSync(filename, 'utf8'));
