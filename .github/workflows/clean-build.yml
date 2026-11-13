@@ -97,6 +97,7 @@ jobs:
           node scripts/tests/clean-smoke.cjs
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Upload smoke test screenshot
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v6
         with:
           name: bruno-clean-smoke-${{ matrix.platform }}
