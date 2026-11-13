@@ -34,8 +34,9 @@ test('current repository versions and release notes agree', () => {
 
 test('rejects mismatched release tags and manifest or lockfile versions', (t) => {
   const { root, write } = fixture(t);
-  assert.equal(checkVersion(root, 'v2.1.0'), '2.1.0');
-  assert.throws(() => checkVersion(root, 'v2.1.1'), /Tag/);
+  assert.equal(checkVersion(root, 'fork-v2.1.0'), '2.1.0');
+  assert.throws(() => checkVersion(root, 'v2.1.0'), /Tag/);
+  assert.throws(() => checkVersion(root, 'fork-v2.1.1'), /Tag/);
   write('packages/bruno-app/package.json', { version: '2.0.0' });
   assert.throws(() => checkVersion(root), /bruno-app/);
   write('packages/bruno-app/package.json', { version: '2.1.0' });
@@ -48,7 +49,7 @@ test('rejects mismatched release tags and manifest or lockfile versions', (t) =>
 test('bumps all desktop versions without changing upstream package versions', (t) => {
   const { root } = fixture(t);
   setVersion(root, '2.2.0-beta.1');
-  assert.equal(checkVersion(root, 'v2.2.0-beta.1'), '2.2.0-beta.1');
+  assert.equal(checkVersion(root, 'fork-v2.2.0-beta.1'), '2.2.0-beta.1');
   const lock = JSON.parse(fs.readFileSync(path.join(root, 'package-lock.json')));
   assert.equal(lock.packages['packages/bruno-lang'].version, '0.12.0');
   assert.match(fs.readFileSync(path.join(root, 'packages/bruno-app/src/components/ChangelogTab/CHANGELOG.ru.md'), 'utf8'), /^## Bruno 2\.2\.0-beta\.1\n/);
@@ -69,7 +70,7 @@ test('requires nonempty dated release notes and does not include other releases 
 
 test('validates release identifiers and follows SemVer prerelease precedence', () => {
   for (const value of ['2.1.0', '2.2.0-beta.1', '3.0.0-rc.10', '3.0.0-alpha-beta.0']) validateVersion(value);
-  for (const value of ['v2.1.0', '2.1', '02.1.0', '2.1.0-01', '2.1.0+build', '2.1.0\n', undefined]) {
+  for (const value of ['fork-v2.1.0', '2.1', '02.1.0', '2.1.0-01', '2.1.0+build', '2.1.0\n', undefined]) {
     assert.throws(() => validateVersion(value), /Invalid/);
   }
   const ordered = ['2.1.0-alpha', '2.1.0-alpha.1', '2.1.0-beta.2', '2.1.0-beta.11', '2.1.0-rc.1', '2.1.0', '2.1.1', '2.2.0', '3.0.0'];

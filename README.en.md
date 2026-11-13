@@ -43,7 +43,7 @@ See the Russian [build guide](docs/fork/building.md), [contribution guide](contr
 and [versioning policy](docs/fork/versioning.md) for exact commands.
 
 From 2.1.0 onwards, this fork uses independent semantic versions. Desktop package versions,
-lockfile entries, the Git tag `vX.Y.Z` and release artifacts must agree. Shared packages keep their
+lockfile entries, the Git tag `fork-vX.Y.Z` and release artifacts must agree. Shared packages keep their
 upstream versions. Main-branch builds are CI artifacts; version tags publish releases after
 Linux startup and Windows installation/startup checks pass. Legacy `clean-build-N` releases are preserved.
 

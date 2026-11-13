@@ -7,7 +7,7 @@ An unofficial fork maintained by ArtimTikhonov, based on Bruno's MIT-licensed so
 - Removed AI chat, generation, autocomplete and provider SDKs.
 - Removed Golden Edition promotions and the remote announcement feed.
 - The application and executables are named Bruno / bruno; the internal identity is preserved for existing settings.
-- Releases now use matching application versions and tags: v2.1.0.
+- Releases now use matching application versions and tags: fork-v2.1.0.
 
 Request/response data, URLs, variable names and code remain untouched by localization.
 This fork does not unlock proprietary commercial modules or promise feature parity with paid editions.

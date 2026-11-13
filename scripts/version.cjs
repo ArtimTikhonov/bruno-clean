@@ -66,7 +66,7 @@ const checkVersion = (root, tag) => {
   for (const key of ['', 'packages/bruno-app', 'packages/bruno-electron']) {
     if (lock.packages?.[key]?.version !== version) throw new Error(`Version mismatch in package-lock.json packages[${key}]; expected ${version}`);
   }
-  if (tag !== undefined && tag !== `v${version}`) throw new Error(`Tag ${tag} does not match v${version}`);
+  if (tag !== undefined && tag !== `fork-v${version}`) throw new Error(`Tag ${tag} does not match fork-v${version}`);
   for (const filename of appNotes) {
     if (fs.readFileSync(path.join(root, filename), 'utf8').split(/\r?\n/)[0] !== `## Bruno ${version}`) {
       throw new Error(`Version mismatch in ${filename}; expected heading ## Bruno ${version}`);
@@ -106,7 +106,7 @@ if (require.main === module) {
       if (command === 'notes') process.stdout.write(releaseNotes(root, version));
       else console.log(`Desktop manifests, lockfile and changelog agree: ${version}`);
       if (process.env.GITHUB_OUTPUT) {
-        fs.appendFileSync(process.env.GITHUB_OUTPUT, `version=${version}\ntag=v${version}\nprerelease=${version.includes('-')}\n`);
+        fs.appendFileSync(process.env.GITHUB_OUTPUT, `version=${version}\ntag=fork-v${version}\nprerelease=${version.includes('-')}\n`);
       }
     } else throw new Error('Usage: node scripts/version.cjs check|set VERSION|notes');
   } catch (error) {

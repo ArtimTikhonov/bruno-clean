@@ -25,7 +25,7 @@
 
 - Отображаемое имя приложения и установщика — Bruno; исполняемые файлы — `bruno.exe` и `bruno`.
 - Внутренний идентификатор сохранён, чтобы переименование не меняло расположение настроек.
-- Публичные релизы выпускаются по тегам `vX.Y.Z` после проверок Windows x64 и Linux x64.
+- Публичные релизы выпускаются по тегам `fork-vX.Y.Z` после проверок Windows x64 и Linux x64.
 - Версии приложения и имена установочных файлов согласованы; прежние `clean-build-N` остаются в истории.
 
 ### Удалено
@@ -54,5 +54,5 @@
 согласованного версионирования. Они могли содержать разные изменения при одинаковой версии пакетов `2.0.0`.
 Существующие теги и файлы не переименовываются и не заменяются.
 
-[Unreleased]: https://github.com/ArtimTikhonov/bruno-clean/compare/v2.1.0...main
-[2.1.0]: https://github.com/ArtimTikhonov/bruno-clean/releases/tag/v2.1.0
+[Unreleased]: https://github.com/ArtimTikhonov/bruno-clean/compare/fork-v2.1.0...main
+[2.1.0]: https://github.com/ArtimTikhonov/bruno-clean/releases/tag/fork-v2.1.0
