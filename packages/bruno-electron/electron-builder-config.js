@@ -75,7 +75,7 @@ const config = {
     ]
   },
   linux: {
-    executableName: 'bruno-clean',
+    executableName: 'bruno',
     artifactName: 'bruno_${version}_${arch}_${os}.${ext}',
     icon: 'resources/icons/png',
     target: [
@@ -130,7 +130,7 @@ const config = {
     }
   },
   win: {
-    executableName: 'bruno-clean',
+    executableName: 'bruno',
     artifactName: 'bruno_${version}_${arch}_setup.${ext}',
     icon: 'resources/icons/win/icon.ico',
     target: [

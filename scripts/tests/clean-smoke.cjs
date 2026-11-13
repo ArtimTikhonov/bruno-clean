@@ -16,8 +16,8 @@ const os = require('node:os');
   let currentWindow;
   try {
     const executable = process.platform === 'win32'
-      ? '../../packages/bruno-electron/out/win-unpacked/bruno-clean.exe'
-      : '../../packages/bruno-electron/out/linux-unpacked/bruno-clean';
+      ? '../../packages/bruno-electron/out/win-unpacked/bruno.exe'
+      : '../../packages/bruno-electron/out/linux-unpacked/bruno';
     app = await electron.launch({
       executablePath: process.env.BRUNO_CLEAN_EXECUTABLE || path.join(__dirname, executable),
       env: environment,
