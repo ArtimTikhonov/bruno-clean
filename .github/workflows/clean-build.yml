@@ -74,13 +74,16 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          $installer = Get-ChildItem packages/bruno-electron/out/*_setup.exe | Select-Object -First 1
+          $installer = Get-ChildItem packages/bruno-electron/out/*_x64_setup.exe | Select-Object -First 1
           if (-not $installer) { throw 'Windows installer is missing' }
           $installDir = Join-Path $env:RUNNER_TEMP 'BrunoCleanInstall'
-          $process = Start-Process -FilePath $installer.FullName -ArgumentList '/S', "/D=$installDir" -Wait -PassThru
+          $process = Start-Process -FilePath $installer.FullName -ArgumentList '/S', '/currentuser', "/D=$installDir" -Wait -PassThru
           if ($process.ExitCode -ne 0) { throw "Installer failed: $($process.ExitCode)" }
           $env:BRUNO_CLEAN_EXECUTABLE = Join-Path $installDir 'bruno-clean.exe'
-          if (-not (Test-Path $env:BRUNO_CLEAN_EXECUTABLE)) { throw 'Installed executable is missing' }
+          if (-not (Test-Path $env:BRUNO_CLEAN_EXECUTABLE)) {
+            Get-ChildItem $installDir -ErrorAction SilentlyContinue | Select-Object Name
+            throw 'Installed executable is missing'
+          }
           node scripts/tests/clean-smoke.cjs
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Upload smoke test screenshot
