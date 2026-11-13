@@ -1,8 +1,8 @@
-blank_issues_enabled: false
+blank_issues_enabled: true
 contact_links:
-  - name: Discussions
-    url: https://github.com/usebruno/bruno/discussions
-    about: You can ask general questions or give feedback here.
-  - name: Discord Server
-    url: https://discord.com/invite/KgcZUncpjq
-    about: Join our Discord community to chat about Bruno.
+  - name: Скачать последнюю сборку форка
+    url: https://github.com/ArtimTikhonov/bruno-clean/releases/latest
+    about: Windows x64 и Linux x64, заметки к релизу и контрольные суммы.
+  - name: Документация оригинального Bruno
+    url: https://docs.usebruno.com/
+    about: Справочник по запросам, скриптам и форматам коллекций; отличия форка описаны в README.

@@ -1,11 +1,15 @@
-## Bruno Clean
+## Bruno 2.1.0
 
-This is an unofficial, independently maintained fork of Bruno's MIT-licensed source code.
+An unofficial fork maintained by ArtimTikhonov, based on Bruno's MIT-licensed source code.
 
-- Removed the Golden Edition promotion and purchase screen.
-- Removed the upstream announcement feed and its notification button.
-- Replaced the upstream product announcement page with these fork notes.
+- Russian UI by default; English is available in Preferences → General → Language.
+- Optional English IT labels such as Headers, Body, Query Params, Token, Proxy and Cache. Restart to apply language and terminology changes.
+- Removed AI chat, generation, autocomplete and provider SDKs.
+- Removed Golden Edition promotions and the remote announcement feed.
+- The application and executables are named Bruno / bruno; the internal identity is preserved for existing settings.
+- Releases now use matching application versions and tags: v2.1.0.
 
-This build includes the functionality available in the open-source repository.
+Request/response data, URLs, variable names and code remain untouched by localization.
+This fork does not unlock proprietary commercial modules or promise feature parity with paid editions.
 
-[Source code and changes](https://github.com/ArtimTikhonov/bruno-clean)
+[Full changelog](https://github.com/ArtimTikhonov/bruno-clean/blob/main/CHANGELOG.md) · [Releases](https://github.com/ArtimTikhonov/bruno-clean/releases)

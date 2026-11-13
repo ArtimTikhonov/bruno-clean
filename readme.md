@@ -1,276 +1,125 @@
+<div align="center">
+
+<img src="assets/images/logo-transparent.png" width="80" alt="Bruno" />
+
 # Bruno
 
-Unofficial fork of [Bruno](https://github.com/usebruno/bruno), maintained by ArtimTikhonov.
-This fork removes the Golden Edition promotion, the upstream remote announcement feed,
-and the product marketing page embedded in the changelog tab.
-It contains only the functionality available in the open-source repository.
+**API-клиент с русским интерфейсом, без ИИ и рекламы платных функций.**
 
-## Download this fork
+[![Сборка](https://github.com/ArtimTikhonov/bruno-clean/actions/workflows/clean-build.yml/badge.svg)](https://github.com/ArtimTikhonov/bruno-clean/actions/workflows/clean-build.yml)
+[![Версия](https://img.shields.io/github/v/release/ArtimTikhonov/bruno-clean)](https://github.com/ArtimTikhonov/bruno-clean/releases/latest)
+[![Лицензия MIT](https://img.shields.io/badge/license-MIT-blue.svg)](license.md)
 
-Download from the [latest release](https://github.com/ArtimTikhonov/bruno-clean/releases/latest):
+[Скачать](https://github.com/ArtimTikhonov/bruno-clean/releases/latest) · [История изменений](CHANGELOG.md) · [Сообщить об ошибке](https://github.com/ArtimTikhonov/bruno-clean/issues/new/choose) · [English](README.en.md)
 
-- Windows x64: run the `bruno_*_x64_setup.exe` installer.
-- Linux x64: make the AppImage executable, then run it.
+</div>
 
-Releases are published only after both platforms pass their startup checks.
-Windows installers are unsigned.
+Неофициальный форк [usebruno/bruno](https://github.com/usebruno/bruno), который поддерживает
+[ArtimTikhonov](https://github.com/ArtimTikhonov). Приложение называется **Bruno**;
+`bruno-clean` остаётся именем репозитория и внутренним идентификатором для сохранения настроек.
+Форк не связан с Bruno Software Inc. и не является официальной сборкой Bruno.
 
-## Язык интерфейса / Interface language
+## Что изменено
 
-Русский язык включён по умолчанию. Переведены меню, настройки, редактор запросов,
-окружения и сообщения интерфейса. Чтобы выбрать английский, откройте
-**Настройки → Основные → Язык**, затем перезапустите приложение.
-Данные запросов, ответы API, имена переменных и код не переводятся.
+| Возможность | В этом форке |
+| --- | --- |
+| Язык интерфейса | Русский по умолчанию; можно выбрать English |
+| IT-терминология | Отдельная настройка английских названий Headers, Body, Query Params, Token, Proxy, Cache и других |
+| ИИ | Удалены чат, генерация, ИИ-автодополнение, IPC-обработчики и SDK провайдеров |
+| Реклама | Удалены продвижение Golden Edition и удалённая лента объявлений Bruno |
+| Данные запросов | Содержимое запросов и ответов, код, URL и имена переменных не переводятся |
+| Название приложения | Bruno; исполняемые файлы `bruno.exe` и `bruno` |
+| Сборки | Установщик Windows x64 и AppImage Linux x64 |
 
-В этом же разделе можно включить **Оставлять привычные IT-термины на английском**:
-Headers, Body, Query Params, Token, Proxy, Cache и другие названия останутся
-английскими. Изменение применяется после перезапуска. ИИ-функции удалены из этой сборки.
+Сохраняются возможности открытой кодовой базы: HTTP/REST, GraphQL, gRPC и WebSocket,
+коллекции, окружения, скрипты, тесты, импорт и экспорт, работа с Git и OpenAPI.
+Подробности — в [CHANGELOG](CHANGELOG.md).
 
-Russian is the default UI language. Select English under
-**Preferences → General → Language**, then restart the app to apply it.
+## Скачать и установить
 
-The [build workflow](https://github.com/ArtimTikhonov/bruno-clean/actions/workflows/clean-build.yml)
-also retains the installers and startup screenshots as downloadable artifacts for 30 days.
+Готовые файлы находятся в [последнем релизе](https://github.com/ArtimTikhonov/bruno-clean/releases/latest).
+Начиная с **2.1.0**, номер в имени файла совпадает с версией приложения и Git-тегом `vX.Y.Z`.
 
-## Build from source
+| Система | Файл | Установка |
+| --- | --- | --- |
+| Windows x64 | `bruno_X.Y.Z_x64_setup.exe` | Запустите установщик; приложение появится в меню «Пуск» как Bruno |
+| Linux x64 | `bruno_X.Y.Z_x86_64_linux.AppImage` | Разрешите выполнение файла и запустите его |
 
-Use the Node.js version in `.nvmrc`, then run:
+```bash
+chmod +x bruno_2.1.0_x86_64_linux.AppImage
+./bruno_2.1.0_x86_64_linux.AppImage
+```
 
-```sh
+Каждый релиз содержит `SHA256SUMS.txt`. Проверка в Linux:
+`sha256sum --ignore-missing -c SHA256SUMS.txt`. В Windows:
+`Get-FileHash .\bruno_2.1.0_x64_setup.exe -Algorithm SHA256` — сравните результат с файлом сумм.
+Windows-сборки не имеют цифровой подписи. Сборки macOS и ARM64 в релизы этого форка пока не входят.
+
+Если окно не отображается в Wayland или виртуальной машине, попробуйте
+`./bruno_2.1.0_x86_64_linux.AppImage --ozone-platform=x11 --disable-gpu`.
+Другие способы запуска описаны в [инструкции по сборке](docs/fork/building.md).
+
+## Язык и английские IT-термины
+
+Откройте **Настройки → Основные → Язык**.
+
+- **Язык интерфейса** — Русский или English.
+- **Оставлять привычные IT-термины на английском** — сохраняет названия вроде Headers,
+  Body, Query Params, Token, Proxy и Cache в русском интерфейсе. По умолчанию выключено.
+
+После изменения языка или терминологии перезапустите приложение.
+Настройка терминов использует подготовленный словарь названий и не переводит пользовательские данные.
+
+![Русский интерфейс с английскими IT-терминами](docs/fork/images/preferences-ru-it.png)
+
+## Платные функции и ограничения
+
+Форк собирается из открытых исходников. Он не загружает и не разблокирует закрытые коммерческие модули
+и не обещает полный набор возможностей Pro или Ultimate.
+
+В проверенных обработчиках создания рабочих пространств и OpenAPI Sync нет тарифных лимитов
+«2 пространства» и «5 синхронизаций в месяц». Это вывод о данной кодовой базе,
+а не гарантия отсутствия всех технических ограничений. Снятие защитных лимитов размера,
+времени выполнения или сетевых запросов не является целью проекта.
+
+## Разработка
+
+Нужны Git и версия Node.js из [.nvmrc](.nvmrc). Репозиторий использует npm workspaces.
+
+```bash
+git clone https://github.com/ArtimTikhonov/bruno-clean.git
+cd bruno-clean
 npm run setup
 npm run dev
 ```
 
-The build workflow also checks JavaScript, builds the renderer, packages the app,
-and tests that the announcement IPC clears announcements without fetching remote content.
-
-## Credits and license
-
-Original code: Anoop M D, Anusree P S and Contributors, under the [MIT license](license.md).
-Existing copyright and license notices are preserved. Bruno is a trademark of Anoop M D;
-this fork is not an official Bruno release and is not affiliated with Bruno Software Inc.
-The retained upstream dog artwork comes from [OpenMoji](https://openmoji.org/),
-licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
-
-The upstream documentation below describes Bruno and may refer to upstream packages
-or installers. For this fork, use the build and download instructions above.
-
----
-
-<br />
-<img src="assets/images/logo-transparent.png" width="80"/>
-
-### Bruno - Opensource IDE for exploring and testing APIs.
-
-[![GitHub version](https://badge.fury.io/gh/usebruno%2Fbruno.svg)](https://badge.fury.io/gh/usebruno%2Fbruno)
-[![CI](https://github.com/usebruno/bruno/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/usebruno/bruno/actions/workflows/tests.yml)
-[![Commit Activity](https://img.shields.io/github/commit-activity/m/usebruno/bruno)](https://github.com/usebruno/bruno/pulse)
-[![X](https://img.shields.io/twitter/follow/use_bruno?style=social&logo=x)](https://twitter.com/use_bruno)
-[![Website](https://img.shields.io/badge/Website-Visit-blue)](https://www.usebruno.com)
-[![Download](https://img.shields.io/badge/Download-Latest-brightgreen)](https://www.usebruno.com/downloads)
-
-**English**
-| [Українська](docs/readme/readme_ua.md)
-| [Русский](docs/readme/readme_ru.md)
-| [Türkçe](docs/readme/readme_tr.md)
-| [Deutsch](docs/readme/readme_de.md)
-| [Français](docs/readme/readme_fr.md)
-| [Português (BR)](docs/readme/readme_pt_br.md)
-| [한국어](docs/readme/readme_kr.md)
-| [বাংলা](docs/readme/readme_bn.md)
-| [Español](docs/readme/readme_es.md)
-| [Italiano](docs/readme/readme_it.md)
-| [Română](docs/readme/readme_ro.md)
-| [Polski](docs/readme/readme_pl.md)
-| [简体中文](docs/readme/readme_cn.md)
-| [正體中文](docs/readme/readme_zhtw.md)
-| [العربية](docs/readme/readme_ar.md)
-| [日本語](docs/readme/readme_ja.md)
-| [ქართული](docs/readme/readme_ka.md)
-| [Nederlands](docs/readme/readme_nl.md)
-| [فارسی](docs/readme/readme_fa.md)
-| [हिन्दी](docs/readme/readme_hi.md)
-
-Bruno is a new and innovative API client, aimed at revolutionizing the status quo represented by Postman and similar tools out there.
-
-Bruno stores your collections directly in a folder on your filesystem. We use a plain text markup language, Bru, to save information about API requests.
-
-You can use Git or any version control of your choice to collaborate over your API collections.
-
-Bruno is offline-only. There are no plans to add cloud-sync to Bruno, ever. We value your data privacy and believe it should stay on your device. Read our long-term vision [here](https://github.com/usebruno/bruno/discussions/269)
-
-[Download Bruno](https://www.usebruno.com/downloads)
-
-📢 Watch our recent talk at India FOSS 3.0 Conference [here](https://www.youtube.com/watch?v=7bSMFpbcPiY)
-
-![bruno](assets/images/landing-2-dark.png#gh-light-mode-only)
-![bruno](assets/images/landing-2-light.png#gh-dark-mode-only) <br /><br />
-
-## Table of Contents
-
-- [Installation](#installation)
-- [Bruno CLI](#bruno-cli)
-- [Run with Docker](#run-with-docker)
-- [Features](#features)
-  - [Run across multiple platforms 🖥️](#run-across-multiple-platforms-%EF%B8%8F)
-  - [Collaborate via Git 👩‍💻🧑‍💻](#collaborate-via-git-%E2%80%8D%E2%80%8D)
-- [Important Links 📌](#important-links-)
-- [Showcase 🎥](#showcase-)
-- [Share Testimonials 📣](#share-testimonials-)
-- [Publishing to New Package Managers](#publishing-to-new-package-managers)
-- [Stay in touch 🌐](#stay-in-touch-)
-- [Trademark](#trademark)
-- [Contribute 👩‍💻🧑‍💻](#contribute-%E2%80%8D%E2%80%8D)
-- [Authors](#authors)
-- [License 📄](#license-)
-
-## Installation
-
-Bruno is available as binary download [on our website](https://www.usebruno.com/downloads) for Mac, Windows and Linux.
-
-You can also install Bruno via package managers like Homebrew, Chocolatey, Scoop, Snap, Flatpak and Apt.
-
-```sh
-# On Mac via Homebrew
-brew install bruno
-
-# On Windows via Chocolatey
-choco install bruno
-
-# On Windows via Scoop
-scoop bucket add extras
-scoop install bruno
-
-# On Windows via winget
-winget install Bruno.Bruno
-
-# On Linux via Snap
-snap install bruno
-
-# On Linux via Flatpak
-flatpak install com.usebruno.Bruno
-
-# On Arch Linux via AUR
-yay -S bruno
-
-# On Linux via Apt
-sudo mkdir -p /etc/apt/keyrings
-sudo apt update && sudo apt install gpg curl
-curl -fsSL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x9FA6017ECABE0266" \
-  | gpg --dearmor \
-  | sudo tee /etc/apt/keyrings/bruno.gpg > /dev/null
-sudo chmod 644 /etc/apt/keyrings/bruno.gpg
-echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/bruno.gpg] http://debian.usebruno.com/ bruno stable" \
-  | sudo tee /etc/apt/sources.list.d/bruno.list
-sudo apt update && sudo apt install bruno
-```
-
-## Bruno CLI
-
-The **Bruno CLI** lets you run your API collections from the command line, which is ideal for automated testing and CI/CD pipelines. Install it from npm using the package manager of your choice:
-
-```sh
-npm install -g @usebruno/cli
-```
-
-Navigate to the directory containing your collection and run it:
-
-```sh
-# Run every request in the collection
-bru run
-
-# Run a single request
-bru run request.bru
-
-# Run a folder against a specific environment
-bru run folder --env Local
-```
-
-For the full command reference, see the [Bruno CLI documentation](https://docs.usebruno.com/bru-cli/overview).
-
-## Run with Docker
-
-Official Docker images for the **Bruno CLI** let you run API collections in CI/CD pipelines and locally without installing Node.js or npm on the host. Images are published to both [Docker Hub](https://hub.docker.com/r/usebruno/cli) and the [GitHub Container Registry](https://ghcr.io/usebruno/cli) on every CLI release, with `alpine` and `debian` variants for `linux/amd64` and `linux/arm64`.
-
-```sh
-# Pull from Docker Hub
-docker pull usebruno/cli:latest
-
-# Or pull from the GitHub Container Registry
-docker pull ghcr.io/usebruno/cli:latest
-
-# Run a collection by mounting the current directory
-docker run -v $(pwd):/bruno usebruno/cli run
-```
-
-For variants, tag matrix, environment files, and CI examples (GitHub Actions, GitLab CI, Jenkins), see the full [Bruno CLI Docker documentation](https://docs.usebruno.com/bru-cli/docker).
-
-## Features
-
-### Run across multiple platforms 🖥️
-
-![bruno](assets/images/run-anywhere.png) <br /><br />
-
-### Collaborate via Git 👩‍💻🧑‍💻
-
-Or any version control system of your choice
-
-![bruno](assets/images/version-control.png) <br /><br />
-
-## Important Links 📌
-
-- [Our Long Term Vision](https://github.com/usebruno/bruno/discussions/269)
-- [Roadmap](https://www.usebruno.com/roadmap)
-- [Documentation](https://docs.usebruno.com)
-- [Stack Overflow](https://stackoverflow.com/questions/tagged/bruno)
-- [Website](https://www.usebruno.com)
-- [Download](https://www.usebruno.com/downloads)
-
-## Showcase 🎥
-
-- [Testimonials](https://github.com/usebruno/bruno/discussions/343)
-- [Knowledge Hub](https://github.com/usebruno/bruno/discussions/386)
-- [Scriptmania](https://github.com/usebruno/bruno/discussions/385)
-
-## Share Testimonials 📣
-
-If Bruno has helped you at work and your teams, please don't forget to share your [testimonials on our GitHub discussion](https://github.com/usebruno/bruno/discussions/343)
-
-## Publishing to New Package Managers
-
-Please see [here](publishing.md) for more information.
-
-## Stay in touch 🌐
-
-[𝕏 (Twitter)](https://twitter.com/use_bruno) <br />
-[Website](https://www.usebruno.com) <br />
-[Discord](https://discord.com/invite/KgcZUncpjq) <br />
-[LinkedIn](https://www.linkedin.com/company/usebruno)
-
-## Trademark
-
-**Name**
-
-`Bruno` is a trademark held by [Anoop M D](https://www.helloanoop.com/)
-
-**Logo**
-
-The logo is sourced from [OpenMoji](https://openmoji.org/library/emoji-1F436/). License: CC [BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
-
-## Contribute 👩‍💻🧑‍💻
-
-I am happy that you are looking to improve bruno. Please check out the [contributing guide](contributing.md)
-
-Even if you are not able to make contributions via code, please don't hesitate to file bugs and feature requests that needs to be implemented to solve your use case.
-
-## Authors
-
-<div align="center">
-    <a href="https://github.com/usebruno/bruno/graphs/contributors">
-        <img src="https://contrib.rocks/image?repo=usebruno/bruno" />
-    </a>
-</div>
-
-## License 📄
-
-[MIT](license.md)
+`setup` переустанавливает зависимости и собирает общие пакеты. Для воспроизводимой установки
+и упаковки используйте [building.md](docs/fork/building.md).
+
+- [Участие в разработке](contributing.md)
+- [Правила версионирования и выпуск релиза](docs/fork/versioning.md)
+- [История изменений](CHANGELOG.md)
+- [Лицензии и авторство](THIRD_PARTY_NOTICES.md)
+
+## Проверки и релизы
+
+[GitHub Actions](https://github.com/ArtimTikhonov/bruno-clean/actions/workflows/clean-build.yml)
+проверяет согласованность версий, изоляцию объявлений, переводы и сохранность значений,
+JavaScript, сборку и запуск приложения. На обеих платформах проверяются русский интерфейс,
+сохранение режима английских IT-терминов и переключение на English.
+На Windows дополнительно проверяются установка и запуск установленного приложения.
+
+Коммиты в `main` запускают проверки и сохраняют сборки как артефакты на 30 дней.
+Публичный релиз создаётся по тегу `vX.Y.Z` только после успешных проверок обеих платформ.
+Старые теги `clean-build-N` оставлены как история предварительных сборок.
+
+## Авторство и лицензия
+
+Оригинальный Bruno: Anoop M D, Anusree P S и Contributors.
+Исходный код распространяется по [MIT](license.md); уведомления об авторских правах сохранены.
+Bruno — товарный знак Anoop M D.
+
+Сохранённая иллюстрация собаки — [OpenMoji](https://openmoji.org/),
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+Полные сведения — в [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Документация оригинального проекта: [docs.usebruno.com](https://docs.usebruno.com/).

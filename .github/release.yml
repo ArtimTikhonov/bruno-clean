@@ -1,0 +1,18 @@
+changelog:
+  exclude:
+    labels:
+      - duplicate
+      - invalid
+  categories:
+    - title: Новые возможности
+      labels:
+        - enhancement
+    - title: Исправления
+      labels:
+        - bug
+    - title: Документация
+      labels:
+        - documentation
+    - title: Другие изменения
+      labels:
+        - '*'

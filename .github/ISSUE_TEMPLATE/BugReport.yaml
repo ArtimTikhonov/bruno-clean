@@ -1,87 +1,60 @@
-name: Bug Report
-description: File a bug report
-labels: ['bug', 'status-new']
+name: Ошибка в форке Bruno
+description: Сообщить о проблеме этой сборки, перевода или установщика.
+labels: ['bug']
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to fill out this bug report!
-
-        ⚠️ Before submitting, please make sure you've searched existing issues:
-        👉 [Search existing issues](https://github.com/usebruno/bruno/issues?q=is%3Aissue)
-
-  - type: checkboxes
-    attributes:
-      label: 'I have checked the following:'
-      options:
-        - label: "I have searched existing issues and found nothing related to my issue."
-          required: true
-
-  - type: checkboxes
-    attributes:
-      label: 'This bug is:'
-      options:
-        - label: Making Bruno unusable for me.
-          required: false
-        - label: Slowing me down but I'm able to continue working.
-          required: false
-        - label: Annoying.
-          required: false
-        - label: This feature was working in a previous version but is broken in the current release.
-          required: false
-
+        Это трекер неофициального форка ArtimTikhonov/bruno-clean.
+        Проверьте [существующие обращения](https://github.com/ArtimTikhonov/bruno-clean/issues).
+        Удалите токены, пароли и персональные данные из примеров и логов.
   - type: input
+    id: version
     attributes:
-      label: Bruno version
-      description: Please specify the version of Bruno you are using in which the issue occurs.
-      placeholder: 1.38.1
+      label: Версия приложения
+      description: Версия из «О Bruno» и тег релиза; для самостоятельной сборки — commit SHA.
+      placeholder: 2.1.0 / v2.1.0
     validations:
       required: true
-
   - type: dropdown
+    id: platform
     attributes:
-      label: 💻 Operating System
-      description: Information about the operating system the issue occurs on.
+      label: Платформа
       options:
-        - Windows
-        - macOS
-        - Linux
-        - Others (Please specify below)
+        - Windows x64
+        - Linux x64
+        - Другая платформа / самостоятельная сборка
     validations:
       required: true
-
   - type: input
+    id: os
     attributes:
-      label: Specific OS Version / Distro
-      description: If you selected "Others", or have specific version info (e.g., Ubuntu 24.04, Windows Insider Build), type it here.
-      placeholder: E.g., Arch Linux, Debian, Windows Enterprise
-    validations:
-      required: false
-
-  - type: textarea
-    attributes:
-      label: 🐞 Describe the bug
-      description: A clear and concise description of the bug and how it's affecting your work
+      label: Версия ОС
+      placeholder: Windows 11 / Ubuntu 24.04, Wayland
     validations:
       required: true
-
-  - type: textarea
+  - type: dropdown
+    id: language
     attributes:
-      label: 📝 Steps to reproduce
-      description: The exact steps that can be performed to reproduce the issue
+      label: Язык интерфейса
+      options:
+        - Русский
+        - Русский с английскими IT-терминами
+        - English
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Шаги воспроизведения
+      description: Что открыть и что сделать, чтобы получить ошибку?
     validations:
       required: true
-
   - type: textarea
+    id: expected
     attributes:
-      label: 📁 Collection to reproduce 
-      description: If possible, please attach the collection where the bug is present
-    validations:
-      required: false
-
-  - type: textarea
-    attributes:
-      label: 📷 Screenshots/Live demo link
-      description: Add some screenshots to help explain the problem.
+      label: Ожидаемый и фактический результат
     validations:
       required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Скриншот, логи или минимальный пример без секретов
